@@ -1059,7 +1059,7 @@ body:not(.home) #page-home{display:none!important}
   <div class="card guide-hero">
     <div class="guide-hero-txt">
       <div class="ct"><i class="fas fa-book-open"></i> Guide d'utilisation</div>
-      <p class="guide-hero-sub">Tout ce qu'il faut savoir pour utiliser OpenRBE, expliqué simplement, onglet par onglet - sans aucune connaissance technique.</p>
+      <p class="guide-hero-sub">Tout ce qu'il faut savoir pour utiliser OpenRBE, expliqué simplement, onglet par onglet.</p>
     </div>
     <button class="nb gn guide-dl" onclick="downloadGuidePDF()"><i class="fas fa-file-pdf"></i> Télécharger en PDF</button>
   </div>
@@ -2258,8 +2258,7 @@ function downloadGuidePDF(){
   doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(...C2);
   doc.text("Guide d'utilisation",ML,H/2-14);
   doc.setFont('helvetica','normal');doc.setFontSize(11);doc.setTextColor(...CG);
-  doc.text("Tout ce qu'il faut savoir pour utiliser OpenRBE,",ML,H/2+12);
-  doc.text("sans aucune connaissance technique.",ML,H/2+28);
+  doc.text("Tout ce qu'il faut savoir pour utiliser OpenRBE, onglet par onglet.",ML,H/2+12);
   doc.setFontSize(9);doc.setTextColor(200,220,240);
   doc.text('CN-ITIE Senegal  |  itie.sn',ML,H-40);
   doc.addPage();
