@@ -831,7 +831,7 @@ body:not(.home) #page-home{display:none!important}
     <h2 class="home-h2">Le cadre juridique et normatif</h2>
     <p class="home-lead">L'ensemble des textes nationaux et internationaux qui encadrent le RBE au Sénégal. Tous les liens pointent vers les sources officielles.</p>
 
-    <div class="tx-subhead"><i class="fas fa-flag"></i> Cadre national - Sénégal</div>
+    <div class="tx-subhead"><i class="fas fa-gavel"></i> Décrets</div>
     <div class="tx-cards">
       <div class="tx-card"><div class="tx-tag tx-tag-decret">DÉCRET</div>
         <h3>Décret n° 2025-1354 du 27 août 2025</h3>
@@ -843,16 +843,24 @@ body:not(.home) #page-home{display:none!important}
         <p class="tx-meta">Décret fondateur - crée le RBE auprès des greffes du RCCM. Organise le dépôt, la conservation et la communication des informations.</p>
         <p class="tx-cite">Réf. : JO du 11 avril 2020 · Ministère de la Justice</p>
         <a class="tx-btn" href="https://justice.sec.gouv.sn/wp-content/uploads/2021/01/Decret-Registre-des-Beneficiaires-effectifs-RBE-19-mars-2020-RCCM_210105_155555.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Télécharger (PDF)</a></div>
-      <div class="tx-card"><div class="tx-tag tx-tag-arrete">ARRÊTÉ</div>
-        <h3>Arrêté n° 1598 du 5 février 2021</h3>
-        <p class="tx-meta">Fixe le <b>formulaire de déclaration</b> des bénéficiaires effectifs au RBE.</p>
-        <p class="tx-cite">Réf. : Ministère de la Justice</p>
-        <a class="tx-btn" href="docs/arrete-1598-2021.pdf" download><i class="fas fa-file-pdf"></i> Télécharger (PDF)</a></div>
+    </div>
+
+    <div class="tx-subhead"><i class="fas fa-file-signature"></i> Arrêtés</div>
+    <div class="tx-cards">
       <div class="tx-card"><div class="tx-tag tx-tag-arrete">ARRÊTÉ</div>
         <h3>Arrêté n° 24577 du 2 septembre 2022</h3>
         <p class="tx-meta">Précise les modalités d'identification, de déclaration et de contrôle des informations (volet fiscal - DGID).</p>
         <p class="tx-cite">Réf. : Ministère des Finances · DGID</p>
         <a class="tx-btn" href="https://www.dgid.sn/" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Consulter la source</a></div>
+      <div class="tx-card"><div class="tx-tag tx-tag-arrete">ARRÊTÉ</div>
+        <h3>Arrêté n° 1598 du 5 février 2021</h3>
+        <p class="tx-meta">Fixe le <b>formulaire de déclaration</b> des bénéficiaires effectifs au RBE.</p>
+        <p class="tx-cite">Réf. : Ministère de la Justice</p>
+        <a class="tx-btn" href="docs/arrete-1598-2021.pdf" download><i class="fas fa-file-pdf"></i> Télécharger (PDF)</a></div>
+    </div>
+
+    <div class="tx-subhead"><i class="fas fa-landmark"></i> Lois</div>
+    <div class="tx-cards">
       <div class="tx-card"><div class="tx-tag tx-tag-loi">LOI</div>
         <h3>Loi n° 2021-29 du 5 juillet 2021</h3>
         <p class="tx-meta">Loi de finances rectificative - modifie les articles 633 et 667 du CGI pour renforcer la fiabilité des informations sur les bénéficiaires effectifs.</p>
@@ -1096,17 +1104,6 @@ body:not(.home) #page-home{display:none!important}
 
 </div></div>
 
-<!-- FOOTER -->
-<footer>
-  <span class="fb">OpenRBE</span> - Registre des Bénéficiaires Effectifs |
-  © CN-ITIE - Comité National ITIE Sénégal · 2025 · <span class="fb">Données officielles</span><br>
-  <div class="footer-links">
-    <a href="https://www.justice.gouv.sn" target="_blank" rel="noopener"><i class="fas fa-scale-balanced"></i> Ministère de la Justice</a>
-    <a href="https://itie.sn" target="_blank" rel="noopener"><i class="fas fa-globe"></i> CN-ITIE Sénégal</a>
-    <a href="https://eiti.org" target="_blank" rel="noopener"><i class="fas fa-earth-africa"></i> ITIE International</a>
-    <a href="https://www.dgid.sn" target="_blank" rel="noopener"><i class="fas fa-building-columns"></i> DGID Sénégal</a>
-  </div>
-</footer>
 
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut" aria-label="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 
@@ -2461,8 +2458,6 @@ function renderBeneficiaire(nom){
     <div class="ccs">
       <div><span class="csv2">${rows.length}</span><span class="csl">Entreprise${rows.length>1?'s':''}</span></div>
       <div><span class="csv2 ${isPPE?'red':''}">${isPPE?ppes.length:'0'}</span><span class="csl">PPE</span></div>
-      <div><span class="csv2">${avg!==null?avg+'%':'------'}</span><span class="csl">Part. moy. action</span></div>
-      <div><span class="csv2">${avg_v!==null?avg_v+'%':'------'}</span><span class="csl">Part. moy. voix</span></div>
     </div>
     <div class="ccd">
       <div><div class="cdl"><i class="fas fa-flag"></i> Nationalité(s)</div>${nats.length?nats.join(' • '):NR}</div>
@@ -2521,8 +2516,6 @@ function renderCC(nm){
     <div class="ccs">
       <div><span class="csv2">${rows.length}</span><span class="csl">Bénéficiaire(s)</span></div>
       <div><span class="csv2 ${ppes.length>0?'red':''}">${ppes.length}</span><span class="csl">PPE</span></div>
-      <div><span class="csv2">${avg!==null?avg+'%':'------'}</span><span class="csl">Part. moyenne</span></div>
-      <div><span class="csv2">${med!==null?med+'%':'------'}</span><span class="csl">Part. médiane</span></div>
     </div>
     <div class="ccd">
       <div><div class="cdl"><i class="fas fa-flag"></i> Nationalité(s)</div>${nats.length?nats.join(' • '):NR}</div>
