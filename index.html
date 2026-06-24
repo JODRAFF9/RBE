@@ -916,7 +916,6 @@ body:not(.home) #page-home{display:none!important}
   <div class="kr">
     <div class="kpi" style="border-top-color:var(--gd)"><div class="ki" style="color:var(--gd)"><i class="fas fa-building"></i></div><div><div class="kv" id="k-co">-</div><div class="kl">Entreprises</div></div></div>
     <div class="kpi" style="border-top-color:var(--g)"><div class="ki" style="color:var(--g)"><i class="fas fa-users"></i></div><div><div class="kv" id="k-be">-</div><div class="kl">Bénéficiaires</div></div></div>
-    <div class="kpi" style="border-top-color:var(--y)"><div class="ki" style="color:var(--y)"><i class="fas fa-calculator"></i></div><div><div class="kv" id="k-av">-</div><div class="kl">Moy./entreprise</div></div></div>
     <div class="kpi" style="border-top-color:var(--r)"><div class="ki" style="color:var(--r)"><i class="fas fa-user-shield"></i></div><div><div class="kv" id="k-pp">-</div><div class="kl">PPE</div></div></div>
     <div class="kpi" style="border-top-color:var(--yd)"><div class="ki" style="color:var(--yd)"><i class="fas fa-flag"></i></div><div><div class="kv" id="k-na">-</div><div class="kl">Nationalités</div></div></div>
     <div class="kpi" style="border-top-color:var(--y)"><div class="ki" style="color:var(--y)"><i class="fas fa-globe"></i></div><div><div class="kv" id="k-pa">-</div><div class="kl">Pays résidence</div></div></div>
@@ -941,7 +940,7 @@ body:not(.home) #page-home{display:none!important}
         <i class="fas fa-file-export"></i> Exporter avec sélection
       </button>
     </div>
-    <div class="tw"><table id="tbl-top"><thead><tr><th>Entreprise</th><th>Région</th><th>Greffe</th><th>Bénéficiaires</th><th>Part. moy.</th><th>PPE</th></tr></thead><tbody></tbody></table></div>
+    <div class="tw"><table id="tbl-top"><thead><tr><th>Entreprise</th><th>Région</th><th>Greffe</th><th>Bénéficiaires</th><th>PPE</th></tr></thead><tbody></tbody></table></div>
   </div>
 </div>
 
@@ -1698,7 +1697,6 @@ function renderKPI(){
   const s=stats(FD);
   document.getElementById('k-co').textContent=fmt(s.co.length);
   document.getElementById('k-be').textContent=fmt(s.total);
-  document.getElementById('k-av').textContent=s.avg;
   document.getElementById('k-pp').textContent=s.pp.length;
   document.getElementById('k-na').textContent=s.na.length;
   document.getElementById('k-pa').textContent=s.pr.length;
@@ -1833,7 +1831,7 @@ function renderPct(){
 }
 function renderTop(){
   const tb=document.querySelector('#tbl-top tbody');tb.innerHTML='';
-  compS(FD).slice(0,30).forEach(c=>{const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${esc(c.ds)}</strong></td><td>${c.rs?'<span class="bg">'+esc(c.rs)+'</span>':NR}</td><td>${c.gr?'<span class="bgr">'+esc(c.gr)+'</span>':NR}</td><td><strong>${c.n}</strong></td><td>${c.avg!==null?c.avg+'%':NR}</td><td>${c.ppe>0?'<span class="br">'+c.ppe+' PPE</span>':'0'}</td>`;tb.appendChild(tr);});
+  compS(FD).slice(0,30).forEach(c=>{const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${esc(c.ds)}</strong></td><td>${c.rs?'<span class="bg">'+esc(c.rs)+'</span>':NR}</td><td>${c.gr?'<span class="bgr">'+esc(c.gr)+'</span>':NR}</td><td><strong>${c.n}</strong></td><td>${c.ppe>0?'<span class="br">'+c.ppe+' PPE</span>':'0'}</td>`;tb.appendChild(tr);});
 }
 
 /* BASE COMPLÈTE */
