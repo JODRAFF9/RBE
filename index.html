@@ -34,14 +34,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--bk);font-size:14px
 ::-webkit-scrollbar-thumb{background:var(--g);border-radius:3px}
 
 /* ── HEADER ── */
-#hdr{background:linear-gradient(135deg,var(--g) 0%,var(--gd) 100%);box-shadow:var(--sh-m);position:sticky;top:0;z-index:1000}
+#hdr{background:var(--gd);box-shadow:0 1px 4px rgba(0,0,0,.18);position:sticky;top:0;z-index:1000}
 .hi{display:flex;align-items:center;gap:16px;padding:12px 24px;max-width:1900px;margin:0 auto}
 .hi img{height:52px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25));transition:.3s}
 .hi img:hover{transform:scale(1.04)}
 .hi-sep{width:2px;height:48px;background:rgba(255,255,255,.28);border-radius:1px;flex-shrink:0}
 .hi-t{flex:1}
 .brand{font-size:1.7rem;font-weight:700;letter-spacing:-.5px;color:#fff;line-height:1.1}
-.brand span{color:var(--y)}
+.brand span{color:#F9C74F}
 .sub{font-size:.79rem;color:rgba(255,255,255,.78);font-style:italic;margin-top:2px}
 .tag{font-size:.7rem;color:rgba(255,255,255,.48);margin-top:1px}
 .hdr-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
@@ -52,7 +52,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--bk);font-size:14px
 .sync-pill{display:flex;align-items:center;gap:7px;background:rgba(0,0,0,.22);color:#fff;border:1px solid rgba(255,255,255,.25);padding:5px 13px;border-radius:20px;font-size:.71rem;font-weight:600;font-family:var(--font);cursor:pointer;transition:.2s;white-space:nowrap}
 .sync-pill:hover{background:rgba(0,0,0,.35);border-color:rgba(255,255,255,.45)}
 .sync-pill i{font-size:.8rem}
-.badge{background:var(--y);color:var(--bk);padding:4px 14px;border-radius:20px;font-size:.71rem;font-weight:700}
+.badge{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:4px 12px;border-radius:3px;font-size:.71rem;font-weight:600;letter-spacing:.3px}
 
 
 /* ── NAV ── */
@@ -69,16 +69,29 @@ body.nav-light .nav-bar li a.active{color:var(--gd);border-bottom-color:var(--g)
 /* ── LAYOUT ── */
 #app{display:flex;min-height:calc(100vh - 108px);max-width:1900px;margin:0 auto}
 
-/* ── SIDEBAR ── */
-#sb{width:280px;background:var(--wh);border:1px solid var(--brd);border-radius:10px;padding:18px 16px;position:fixed;top:118px;left:16px;max-height:calc(100vh - 140px);overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.06);z-index:90;transition:transform .25s ease,opacity .2s}
-#sb::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,var(--g) 0%,var(--gd) 100%);border-radius:10px 0 0 10px}
-#sb.collapsed{transform:translateX(calc(-100% - 20px));opacity:0}
-.sb-toggle{position:fixed;top:128px;left:16px;width:42px;height:42px;background:var(--g);color:#fff;border:none;border-radius:50%;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.18);z-index:91;display:none;align-items:center;justify-content:center;font-size:1rem;transition:.2s}
-.sb-toggle:hover{background:var(--gd);transform:scale(1.05)}
-body.show-toggle .sb-toggle{display:flex}
-body.no-filters #sb,body.no-filters .sb-toggle,body.home #sb,body.home .sb-toggle{display:none!important}
+/* ── SIDEBAR dropdown (navbar droite) ── */
+.nav-bar .nav-inner{display:flex;align-items:stretch;padding:0 24px;max-width:1900px;margin:0 auto;overflow:visible}
+.nav-bar .nav-inner ul{display:flex;list-style:none;flex:1;overflow-x:auto}
+.sb-dropdown{position:relative;display:none;align-items:center;margin-left:auto;flex-shrink:0}
+body:not(.home):not(.no-filters) .sb-dropdown{display:flex}
+.sb-drop-btn{display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.78);font-size:.83rem;font-weight:600;padding:10px 15px;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:var(--font);transition:.2s;white-space:nowrap}
+.sb-drop-btn:hover,.sb-drop-btn.open{color:#fff;border-bottom-color:var(--y)}
+body.nav-light .sb-drop-btn{color:var(--gray)}
+body.nav-light .sb-drop-btn:hover,body.nav-light .sb-drop-btn.open{color:var(--gd);border-bottom-color:var(--g)}
+.sb-drop-arrow{font-size:.7rem;transition:transform .25s}
+.sb-drop-btn.open .sb-drop-arrow{transform:rotate(180deg)}
+.sb-panel{display:none;position:absolute;top:100%;right:0;width:280px;background:rgba(15,40,70,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-top:none;border-radius:0 0 8px 8px;box-shadow:0 8px 24px rgba(0,0,0,.35);z-index:2000;padding:14px 16px;max-height:70vh;overflow-y:auto;color:#fff}
+.sb-panel.open{display:block;animation:fu .2s ease}
+.sb-panel .fl{color:rgba(255,255,255,.55)}
+.sb-panel select{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
+.sb-panel select option{background:#0f2846;color:#fff}
+.sb-panel .sw-row{color:rgba(255,255,255,.85)}
+.sb-panel .btn-rst{background:rgba(220,53,69,.15);color:#ff6b7a;border-color:rgba(220,53,69,.4)}
+.sb-panel .btn-rst:hover{background:rgba(220,53,69,.35);color:#fff}
+.sb-panel .active-filters-bar .af-chip{background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.2)}
+body.no-filters .sb-dropdown,body.home .sb-dropdown{display:none!important}
+.sb-toggle{display:none}
 #ct{width:100%}
-body:not(.home):not(.no-filters) #ct{padding-left:20px}
 .sb-ttl{font-size:.77rem;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;padding-bottom:7px;border-bottom:2px solid var(--gl);display:flex;align-items:center;gap:6px}
 .btn-rst{width:100%;margin-bottom:12px;padding:7px;background:var(--rl);color:var(--r);border:1px solid var(--r);border-radius:4px;font-family:var(--font);font-size:.79rem;font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:5px}
 .btn-rst:hover{background:var(--r);color:#fff}
@@ -111,15 +124,15 @@ input[type=range]{width:100%;accent-color:var(--g)}
 
 /* ── KPI ── */
 .kr{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px}
-.kpi{background:var(--wh);border-radius:var(--radius);box-shadow:var(--sh-s);padding:13px 12px;display:flex;align-items:center;gap:10px;border-top:4px solid var(--g);transition:.22s;cursor:default}
-.kpi:hover{transform:translateY(-2px);box-shadow:var(--sh-m)}
+.kpi{background:var(--wh);border-radius:var(--radius);box-shadow:var(--sh-s);padding:13px 12px;display:flex;align-items:center;gap:10px;border-left:3px solid var(--g);transition:.18s;cursor:default}
+.kpi:hover{box-shadow:var(--sh-m)}
 .ki{font-size:1.4rem;width:32px;text-align:center;flex-shrink:0}
 .kv{font-size:1.6rem;font-weight:700;line-height:1;letter-spacing:-.4px}
 .kl{font-size:.67rem;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
 
 /* ── CARDS ── */
-.card{background:var(--wh);border-radius:var(--radius);box-shadow:var(--sh-s);padding:15px;margin-bottom:15px;transition:.22s}
-.card:hover{box-shadow:var(--sh-m)}
+.card{background:var(--wh);border-radius:var(--radius);box-shadow:0 1px 4px rgba(0,0,0,.07);padding:15px;margin-bottom:15px;transition:.18s;border:1px solid var(--brd)}
+.card:hover{box-shadow:0 2px 10px rgba(0,0,0,.09)}
 .ct{font-size:.89rem;font-weight:700;margin-bottom:11px;padding-bottom:8px;border-bottom:2px solid var(--gl);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .ct i{color:var(--g)}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px}
@@ -389,6 +402,9 @@ th.srt.srt-desc::after{content:'▼';opacity:.95;font-size:.7em}
 /* ── FOOTER ── */
 footer{background:var(--bk);color:rgba(255,255,255,.5);text-align:center;padding:14px;font-size:.74rem;margin-top:24px;position:relative}
 footer .fb{color:var(--y);font-weight:700}
+footer .footer-links{margin-top:8px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
+footer .footer-links a{color:rgba(255,255,255,.55);text-decoration:none;transition:.2s;font-size:.73rem}
+footer .footer-links a:hover{color:#fff}
 .btn-admin-foot{position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2);padding:5px 13px;border-radius:4px;font-family:var(--font);font-size:.74rem;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:6px}
 .btn-admin-foot:hover{background:rgba(255,255,255,.2);color:#fff}
 
@@ -423,7 +439,7 @@ tbody tr{cursor:default}
 .kpi:nth-child(4){animation-delay:.2s}
 .kpi:nth-child(5){animation-delay:.25s}
 .kpi:nth-child(6){animation-delay:.3s}
-@keyframes kpiFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes kpiFade{from{opacity:0}to{opacity:1}}
 /* Bouton Réinitialiser amélioré */
 .btn-rst{transition:.25s;letter-spacing:.2px}
 .btn-rst:active{transform:scale(.97)}
@@ -465,12 +481,21 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .tx-section-head h2{font-size:1.3rem;font-weight:700;color:var(--gd);margin-bottom:3px}
 .tx-section-head p{font-size:.85rem;color:var(--gray);margin:0}
 .tx-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:30px}
+.tx-list{list-style:none;margin:0 0 30px;padding:0;display:flex;flex-direction:column;gap:0}
+.tx-list li{display:flex;align-items:center;gap:14px;padding:5px 0}
+.tx-list .tx-tag{margin:0;white-space:nowrap;flex-shrink:0}
+.tx-li-body{flex:1;font-size:.9rem;color:var(--bk);line-height:1.4}
+.tx-li-link{flex:1;font-size:.9rem;color:var(--bk);line-height:1.4;text-decoration:none;display:block}
+.tx-li-link:hover{color:var(--gd)}
+.tx-li-link:hover strong{text-decoration:underline}
+.tx-li-body strong{color:var(--gd)}
+.tx-li-body .tx-cite{display:block;font-size:.75rem;color:var(--gray);margin-top:3px}
 .home-textes{padding-top:50px;padding-bottom:20px}
 .tx-subhead{display:flex;align-items:center;gap:10px;font-size:.78rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--gd);margin:24px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--brd)}
 .tx-subhead i{color:var(--g);font-size:.95rem}
 .tx-card{background:#fff;border:1px solid var(--brd);border-radius:8px;padding:20px 20px 18px;display:flex;flex-direction:column;transition:.15s;position:relative;overflow:hidden}
 .tx-card::before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:var(--g);opacity:.85}
-.tx-card:hover{box-shadow:var(--sh-s);transform:translateY(-2px);border-color:var(--g)}
+.tx-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.08);border-color:var(--g)}
 .tx-tag{align-self:flex-start;font-size:.68rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;padding:4px 9px;border-radius:3px;margin-bottom:14px;margin-top:6px}
 .tx-tag-decret{background:var(--gl);color:var(--gd)}
 .tx-tag-arrete{background:#FFF8E1;color:#8A4B00}
@@ -501,21 +526,9 @@ body:not(.home) #page-home{display:none!important}
 #page-home{display:none}
 #page-home.active{display:block}
 
-.hero{background:linear-gradient(135deg,var(--gd) 0%,var(--g) 55%,#3FAEEB 100%);color:#fff;padding:56px 40px 60px;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.hero-bg svg{position:absolute;width:100%;height:100%}
-.hero-bg .blob{fill:rgba(255,255,255,.06);animation:blobMove 28s ease-in-out infinite alternate}
-.hero-bg .blob.b2{animation-duration:36s;animation-delay:-12s}
-.hero-bg .blob.b3{animation-duration:44s;animation-delay:-22s}
-.hero-bg .dot{fill:#fff;opacity:.55;animation:dotFloat 9s ease-in-out infinite}
-.hero-bg .dot.d2{animation-delay:-3s;animation-duration:11s}
-.hero-bg .dot.d3{animation-delay:-6s;animation-duration:13s}
-.hero-bg .dot.d4{animation-delay:-1.5s;animation-duration:10s}
-.hero-bg .dot.d5{animation-delay:-4.5s;animation-duration:12s}
-.hero-bg .ln{stroke:rgba(255,255,255,.22);stroke-width:1;fill:none;stroke-dasharray:6 8;animation:lnDash 14s linear infinite}
-@keyframes blobMove{0%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,-20px) scale(1.08)}100%{transform:translate(-30px,30px) scale(.95)}}
-@keyframes dotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-@keyframes lnDash{to{stroke-dashoffset:-280}}
+.hero{background:var(--gd);color:#fff;padding:56px 40px 60px;position:relative;overflow:hidden}
+.hero-bg{display:none}
+.hero-bg svg{display:none}
 .hero-inner{position:relative;z-index:1}
 @media(prefers-reduced-motion:reduce){.hero-bg .blob,.hero-bg .dot,.hero-bg .ln{animation:none}}
 .hero-inner{display:flex;align-items:center;gap:48px;max-width:1280px;margin:0 auto}
@@ -538,8 +551,8 @@ body:not(.home) #page-home{display:none!important}
 .home-h2{font-size:1.6rem;font-weight:700;color:var(--gd);letter-spacing:-.2px;margin-bottom:8px}
 .home-lead{font-size:.95rem;color:var(--gray);max-width:720px;margin-bottom:28px;line-height:1.55}
 .ecards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.ecard{background:#fff;border:1px solid var(--brd);border-top:3px solid var(--g);padding:22px 22px 20px;text-decoration:none;display:flex;flex-direction:column;color:var(--bk);transition:.15s}
-.ecard:hover{box-shadow:var(--sh-m);transform:translateY(-2px);border-top-color:var(--gd)}
+.ecard{background:#fff;border:1px solid var(--brd);border-left:3px solid var(--g);padding:22px 22px 20px;text-decoration:none;display:flex;flex-direction:column;color:var(--bk);transition:.15s}
+.ecard:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
 .ec-ic{width:40px;height:40px;border:1px solid var(--g);display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--gd)}
 .ec-ic i{font-size:1rem}
 .ecard h4{font-size:1rem;font-weight:700;color:var(--gd);margin-bottom:8px;letter-spacing:.1px;line-height:1.3}
@@ -631,6 +644,14 @@ body:not(.home) #page-home{display:none!important}
   .ucards{grid-template-columns:1fr}
 }
 /* ===== GUIDE NOVICE ===== */
+.guide-layout{display:flex;align-items:flex-start;gap:20px;margin-top:0}
+.guide-toc{position:sticky;top:72px;width:220px;flex-shrink:0;background:#fff;border:1px solid var(--brd);border-radius:10px;padding:14px 0;font-size:.82rem}
+.guide-toc-title{font-weight:700;color:var(--gd);padding:0 16px 10px;border-bottom:1px solid var(--brd);margin-bottom:6px;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+.guide-toc a{display:block;padding:6px 16px;color:var(--gray);text-decoration:none;border-left:3px solid transparent;transition:all .15s;line-height:1.3}
+.guide-toc a:hover{color:var(--gd);background:var(--yl);border-left-color:var(--y)}
+.guide-toc a.toc-active{color:var(--gd);font-weight:600;border-left-color:var(--gd);background:var(--yl)}
+.guide-card-body{flex:1;min-width:0}
+@media(max-width:768px){.guide-layout{flex-direction:column}.guide-toc{position:static;width:100%;border-radius:8px}}
 .guide-hero{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .guide-hero-txt{flex:1;min-width:240px}
 .guide-hero-sub{margin:6px 0 0;color:var(--gray);font-size:.9rem;line-height:1.55}
@@ -644,12 +665,16 @@ body:not(.home) #page-home{display:none!important}
 .guide-ul li{position:relative;padding:3px 0 3px 20px}
 .guide-ul li:before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;border-radius:2px;background:var(--yd)}
 .guide-note{display:flex;gap:10px;align-items:flex-start;background:var(--yl);border-left:4px solid var(--y);border-radius:6px;padding:11px 14px;margin:10px 0 14px}
+.guide-img-wrap{margin:16px 0 20px;text-align:center}
+.guide-img{width:100%;max-width:900px;border:1px solid var(--brd);border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.1);display:block;margin:0 auto}
+.guide-img-cap{display:block;font-size:.75rem;color:var(--gray);margin-top:7px;font-style:italic}
 .guide-note i{color:var(--yd);margin-top:2px;flex-shrink:0}
 .guide-tbl{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:.88rem}
 .guide-tbl th{background:var(--gd);color:#fff;text-align:left;padding:8px 11px;font-weight:600}
 .guide-tbl td{padding:7px 11px;border-bottom:1px solid var(--brd)}
 .guide-tbl tr:nth-child(even) td{background:var(--bg)}
 .guide-body strong{color:var(--gd);font-weight:600}
+/* ── Sidebar draggable ── */
 </style>
 </head>
 <body>
@@ -664,23 +689,48 @@ body:not(.home) #page-home{display:none!important}
     <div class="hi-sep"></div>
     <div class="hi-t">
       <div class="brand"><span>Open</span>RBE</div>
-      <div class="sub">Open Registre des Bénéficiaires Effectifs</div>
-      <div class="tag">Plateforme nationale de consultation du secteur extractif sénégalais</div>
+      <div class="sub">Registre des Bénéficiaires Effectifs</div>
     </div>
     <div class="hdr-right">
       <button id="sync-status" class="sync-pill" onclick="loadLiveData({notify:true})" title="Actualiser les données"><i class="fas fa-rotate"></i> <span class="sync-lbl">Actualiser les données</span></button>
-      <div class="badge"><i class="fas fa-shield-halved"></i> Données officielles ITIE</div>
     </div>
   </div>
-  <nav class="nav-bar"><ul>
-    <li><a href="#" class="active" data-page="home"><i class="fas fa-house"></i> Accueil</a></li>
-    <li><a href="#" data-page="dashboard"><i class="fas fa-gauge-high"></i> Tableau de bord</a></li>
-    <li><a href="#" data-page="database"><i class="fas fa-database"></i> Base complète</a></li>
-    <li><a href="#" data-page="ppe"><i class="fas fa-user-shield"></i> Analyse PPE</a></li>
-    <li><a href="#" data-page="network"><i class="fas fa-diagram-project"></i> Réseaux</a></li>
-    <li><a href="#" data-page="map"><i class="fas fa-map-location-dot"></i> Cartographie</a></li>
-    <li><a href="#" data-page="guide"><i class="fas fa-book-open"></i> Guide</a></li>
-  </ul></nav>
+  <nav class="nav-bar">
+    <div class="nav-inner">
+      <ul>
+        <li><a href="#" class="active" data-page="home"><i class="fas fa-house"></i> Accueil</a></li>
+        <li><a href="#" data-page="dashboard"><i class="fas fa-gauge-high"></i> Tableau de bord</a></li>
+        <li><a href="#" data-page="database"><i class="fas fa-database"></i> Base complète</a></li>
+        <li><a href="#" data-page="ppe"><i class="fas fa-user-shield"></i> Analyse PPE</a></li>
+        <li><a href="#" data-page="network"><i class="fas fa-diagram-project"></i> Réseaux</a></li>
+        <li><a href="#" data-page="map"><i class="fas fa-map-location-dot"></i> Cartographie</a></li>
+        <li><a href="#" data-page="guide"><i class="fas fa-book-open"></i> Guide</a></li>
+      </ul>
+      <div id="sb-dropdown" class="sb-dropdown">
+        <button class="sb-drop-btn" id="sb-drop-btn" onclick="toggleSbFold(event)" title="Filtres globaux">
+          <i class="fas fa-filter"></i> <span class="sb-drop-lbl">Filtres</span> <i class="fas fa-chevron-down sb-drop-arrow"></i>
+        </button>
+        <div id="sb" class="sb-panel">
+          <div class="sb-body">
+            <button class="btn-rst" onclick="resetF()"><i class="fas fa-rotate-left"></i> Réinitialiser tous les filtres</button>
+            <div id="active-filters-bar" class="active-filters-bar" style="margin-top:6px"></div>
+            <div class="fb"><label class="fl">Région</label>
+              <select id="fr"><option value="">Toutes les régions</option></select>
+            </div>
+            <div class="fb"><label class="fl">Nationalité</label>
+              <select id="fn"><option value="">Toutes les nationalités</option></select>
+            </div>
+            <div class="fb"><label class="fl">Pays de résidence</label>
+              <select id="fp"><option value="">Tous les pays</option></select>
+            </div>
+            <div class="fb"><label class="fl">Statut PPE</label>
+              <div class="sw-row">PPE uniquement <label class="tog"><input type="checkbox" id="fppe"><span class="ts"></span></label></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
 </div>
 
 <!-- ══ PAGE HOME (accueil institutionnelle) ══ -->
@@ -704,7 +754,7 @@ body:not(.home) #page-home{display:none!important}
       <div class="hero-l">
         <div class="hero-eb">Transparence du secteur extractif</div>
         <h1 class="hero-h">Savoir qui possède <em>réellement</em> les entreprises extractives du Sénégal.</h1>
-        <p class="hero-p">OpenRBE rend public et lisible le registre national des bénéficiaires effectifs, dans le cadre de la Norme ITIE 2023. Une plateforme ouverte à tous &mdash; citoyens, journalistes, agents publics, partenaires &mdash; sans compte ni installation.</p>
+        <p class="hero-p">OpenRBE rend public et lisible le registre national des bénéficiaires effectifs, conformément à l'Exigence 2.5 de la Norme ITIE 2023. Une plateforme ouverte à tous : citoyens, journalistes, agents publics, partenaires.</p>
         <div class="hero-cta">
           <a href="#" class="hbtn hbtn-p" onclick="event.preventDefault();document.getElementById('home-q').focus()">Lancer une recherche <i class="fas fa-arrow-right"></i></a>
           <a href="#" class="hbtn hbtn-s" onclick="event.preventDefault();navTo('guide')">Lire le guide <i class="fas fa-book-open"></i></a>
@@ -739,13 +789,6 @@ body:not(.home) #page-home{display:none!important}
       <button onclick="homeSearchGo()" class="home-search-btn">Rechercher</button>
     </div>
     <div id="home-results" class="home-results" style="display:none"></div>
-    <div class="home-sugg">
-      <span>Essayez&nbsp;:</span>
-      <a href="#" onclick="event.preventDefault();homeSuggest('Dakar')">Dakar</a>
-      <a href="#" onclick="event.preventDefault();homeSuggest('Sénégalaise')">Bénéficiaires sénégalais</a>
-      <a href="#" onclick="event.preventDefault();homeSuggest('PPE')">Personnes exposées</a>
-      <a href="#" onclick="event.preventDefault();homeSuggest('mine')">Sociétés minières</a>
-    </div>
   </div>
 
   <div class="home-section">
@@ -768,7 +811,7 @@ body:not(.home) #page-home{display:none!important}
       <a href="#" class="ecard" onclick="event.preventDefault();navTo('dashboard')">
         <div class="ec-ic"><i class="fas fa-chart-column"></i></div>
         <h4>Voir les chiffres et tendances</h4>
-        <p>Indicateurs clés, répartitions par nationalité et région, statut PPE &mdash; l'image d'ensemble du registre en un coup d'œil.</p>
+        <p>Indicateurs clés, répartitions par nationalité et région, statut PPE - l'image d'ensemble du registre en un coup d'œil.</p>
         <span class="ec-lk">Ouvrir le tableau de bord <i class="fas fa-arrow-right"></i></span>
       </a>
       <a href="#" class="ecard" onclick="event.preventDefault();navTo('network')">
@@ -797,117 +840,37 @@ body:not(.home) #page-home{display:none!important}
     <h2 class="home-h2">Récupérer, réutiliser, partager</h2>
     <p class="home-lead">Les données sont publiques et librement réutilisables. Plusieurs formats sont disponibles selon votre usage.</p>
     <div class="acards">
-      <a href="#" class="acard" onclick="event.preventDefault();navTo('database')"><div class="ac-tag">CSV / Excel</div><h5>Télécharger le jeu de données complet</h5><p>Toutes les déclarations dans un fichier tabulaire, prêt pour Excel, R, Python ou tout outil d'analyse.</p><span class="ac-go">Aller à la base &rarr;</span></a>
+      <a href="#" class="acard" onclick="event.preventDefault();navTo('database')"><div class="ac-tag">CSV / Excel</div><h5>Télécharger le jeu de données complet</h5><p>Toutes les déclarations dans un fichier tabulaire, prêt pour Excel ou tout outil d'analyse.</p><span class="ac-go">Aller à la base &rarr;</span></a>
       <a href="#" class="acard" onclick="event.preventDefault();navTo('guide')"><div class="ac-tag">Documentation</div><h5>Comprendre la structure du registre</h5><p>Le guide explique les champs, les conventions et la mise à jour du registre national.</p><span class="ac-go">Lire le guide &rarr;</span></a>
-      <a href="#" class="acard" onclick="event.preventDefault();alert('Licence : les données du registre sont publiques et réutilisables dans le cadre de la Norme ITIE 2023. Mention de la source recommandée : CN-ITIE Sénégal — OpenRBE.')"><div class="ac-tag">Licence</div><h5>Réutilisation & mention de la source</h5><p>Conditions de réutilisation et formulation recommandée pour citer le registre dans vos travaux.</p><span class="ac-go">Lire les conditions &rarr;</span></a>
+      <a href="#" class="acard" onclick="event.preventDefault();alert('Licence : les données du registre sont publiques et réutilisables dans le cadre de la Norme ITIE 2023. Mention de la source recommandée : CN-ITIE Sénégal - OpenRBE.')"><div class="ac-tag">Licence</div><h5>Réutilisation & mention de la source</h5><p>Conditions de réutilisation et formulation recommandée pour citer le registre dans vos travaux.</p><span class="ac-go">Lire les conditions &rarr;</span></a>
     </div>
   </div>
 
   <div class="home-section home-textes">
     <div class="home-eb">Textes officiels &amp; ressources</div>
     <h2 class="home-h2">Le cadre juridique et normatif</h2>
-    <p class="home-lead">L'ensemble des textes nationaux et internationaux qui encadrent le RBE au Sénégal. Tous les liens pointent vers les sources officielles.</p>
 
-    <div class="tx-subhead"><i class="fas fa-flag"></i> Cadre national — Sénégal</div>
-    <div class="tx-cards">
-      <div class="tx-card"><div class="tx-tag tx-tag-decret">DÉCRET</div>
-        <h3>Décret n° 2025-1354 du 27 août 2025</h3>
-        <p class="tx-meta">Modifie le décret 2020-791. Institue l'<b>accès public et gratuit</b> au RBE des entreprises extractives.</p>
-        <p class="tx-cite">Réf. : Journal officiel · CN-ITIE Sénégal</p>
-        <a class="tx-btn" href="https://www.itie.sn/mise-en-oeuvre-du-registre-des-beneficiaires-effectifs/" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Consulter</a></div>
-      <div class="tx-card"><div class="tx-tag tx-tag-decret">DÉCRET</div>
-        <h3>Décret n° 2020-791 du 19 mars 2020</h3>
-        <p class="tx-meta">Décret fondateur — crée le RBE auprès des greffes du RCCM. Organise le dépôt, la conservation et la communication des informations.</p>
-        <p class="tx-cite">Réf. : JO du 11 avril 2020 · Ministère de la Justice</p>
-        <a class="tx-btn" href="https://justice.sec.gouv.sn/wp-content/uploads/2021/01/Decret-Registre-des-Beneficiaires-effectifs-RBE-19-mars-2020-RCCM_210105_155555.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Télécharger (PDF)</a></div>
-      <div class="tx-card"><div class="tx-tag tx-tag-arrete">ARRÊTÉ</div>
-        <h3>Arrêté n° 1598 du 5 février 2021</h3>
-        <p class="tx-meta">Fixe le <b>formulaire de déclaration</b> des bénéficiaires effectifs au RBE.</p>
-        <p class="tx-cite">Réf. : Ministère de la Justice</p>
-        <a class="tx-btn" href="https://justice.sec.gouv.sn/" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Consulter la source</a></div>
-      <div class="tx-card"><div class="tx-tag tx-tag-arrete">ARRÊTÉ</div>
-        <h3>Arrêté n° 24577 du 2 septembre 2022</h3>
-        <p class="tx-meta">Précise les modalités d'identification, de déclaration et de contrôle des informations (volet fiscal — DGID).</p>
-        <p class="tx-cite">Réf. : Ministère des Finances · DGID</p>
-        <a class="tx-btn" href="https://www.dgid.sn/" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Consulter la source</a></div>
-      <div class="tx-card"><div class="tx-tag tx-tag-loi">LOI</div>
-        <h3>Loi n° 2021-29 du 5 juillet 2021</h3>
-        <p class="tx-meta">Loi de finances rectificative — modifie les articles 633 et 667 du CGI pour renforcer la fiabilité des informations sur les bénéficiaires effectifs.</p>
-        <p class="tx-cite">Réf. : Journal officiel · CGI</p>
-        <a class="tx-btn" href="https://www.dgid.sn/" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Voir le CGI</a></div>
-      <div class="tx-card"><div class="tx-tag tx-tag-loi">LOI</div>
-        <h3>Loi n° 2018-03 du 23 février 2018</h3>
-        <p class="tx-meta">Loi anti-blanchiment et lutte contre le financement du terrorisme — transpose la directive UEMOA n° 02/2015/CM/UEMOA.</p>
-        <p class="tx-cite">Réf. : Journal officiel</p>
-        <a class="tx-btn" href="https://www.centif.sn/" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Consulter via CENTIF</a></div>
-    </div>
 
-    <div class="tx-subhead"><i class="fas fa-globe"></i> Cadre international</div>
-    <div class="tx-cards">
-      <div class="tx-card"><div class="tx-tag tx-tag-norme">NORME</div>
-        <h3>Norme ITIE 2023</h3>
-        <p class="tx-meta">Référentiel mondial. <b>Exigence 2.5</b> : divulgation des bénéficiaires effectifs des entreprises extractives.</p>
-        <p class="tx-cite">Réf. : EITI Standard 2023</p>
-        <a class="tx-btn" href="https://eiti.org/sites/default/files/2023-06/EITI%20Standard%202023_FR.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Télécharger (PDF FR)</a></div>
-      <div class="tx-card"><div class="tx-tag tx-tag-norme">DIRECTIVE</div>
-        <h3>Directive UEMOA n° 02/2015/CM/UEMOA</h3>
-        <p class="tx-meta">Directive sous-régionale anti-blanchiment et financement du terrorisme dans l'espace UEMOA.</p>
-        <p class="tx-cite">Réf. : Conseil des Ministres UEMOA</p>
-        <a class="tx-btn" href="https://www.uemoa.int/" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Site officiel</a></div>
-      <div class="tx-card"><div class="tx-tag tx-tag-norme">RAPPORT</div>
-        <h3>Rapports ITIE Sénégal</h3>
-        <p class="tx-meta">Rapports annuels de la CN-ITIE sur la mise en œuvre des exigences ITIE, y compris l'Exigence 2.5.</p>
-        <p class="tx-cite">Réf. : CN-ITIE Sénégal</p>
-        <a class="tx-btn" href="https://www.itie.sn/" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Voir les rapports</a></div>
-    </div>
+    <ul class="tx-list">
+      <li><a class="tx-li-link" href="docs/decret-2025-1354.pdf" download><strong>Décret n° 2025-1354 du 27 août 2025</strong> modifiant le décret n° 2020-791 du 19 mars 2020 relatif au registre des bénéficiaires effectifs.</a></li>
+      <li><a class="tx-li-link" href="https://justice.sec.gouv.sn/wp-content/uploads/2021/01/Decret-Registre-des-Beneficiaires-effectifs-RBE-19-mars-2020-RCCM_210105_155555.pdf" target="_blank" rel="noopener"><strong>Décret n° 2020-791 du 19 mars 2020</strong> relatif au Registre des Bénéficiaires Effectifs.</a></li>
+      <li><a class="tx-li-link" href="https://www.dgid.sn/" target="_blank" rel="noopener"><strong>Arrêté n° 24577 du 2 septembre 2022</strong> fixant les modalités d'identification, de déclaration et de contrôle des bénéficiaires effectifs (volet fiscal - DGID).</a></li>
+      <li><a class="tx-li-link" href="docs/norme-eiti-2023-fr.pdf" download><strong>Norme ITIE 2023</strong></a></li>
+      <li><a class="tx-li-link" href="https://www.itie.sn/rapports/" target="_blank" rel="noopener"><strong>Rapports ITIE Sénégal</strong> - Rapports annuels de la CN-ITIE sur la mise en œuvre des exigences ITIE.</a></li>
+    </ul>
   </div>
 
   <div class="home-band">
     <div class="hb-grid">
       <div class="hb-l">
-        <div class="home-eb">Le cadre</div>
-        <h3 class="hb-h">Une exigence de la Norme ITIE 2023, mise en œuvre au Sénégal.</h3>
-        <p>L'<b>Initiative pour la Transparence des Industries Extractives</b> demande à ses pays membres de rendre publiques les informations sur la propriété effective des entreprises pétrolières, gazières et minières &mdash; l'<b>Exigence 2.5</b> de la norme.</p>
-        <p>OpenRBE est la concrétisation de cette exigence pour le Sénégal&nbsp;: une plateforme ouverte, alimentée en continu par le registre national publié.</p>
         <div class="hb-key">Source officielle&nbsp;: <b>Registre des Bénéficiaires Effectifs</b> &middot; CN-ITIE Sénégal</div>
-      </div>
-      <div class="hb-r">
-        <div class="home-eb">En chiffres</div>
-        <div class="hb-nums">
-          <div class="hb-n"><div class="hbn-v" id="home-co">&mdash;</div><div class="hbn-l">Entreprises</div><div class="hbn-a"></div></div>
-          <div class="hb-n"><div class="hbn-v" id="home-be">&mdash;</div><div class="hbn-l">Bénéficiaires</div><div class="hbn-a"></div></div>
-          <div class="hb-n"><div class="hbn-v" id="home-pp">&mdash;</div><div class="hbn-l">PPE identifiées</div><div class="hbn-a"></div></div>
-        </div>
-        <p class="hb-pull">Les chiffres affichés ici reflètent l'état du registre à la dernière synchronisation. L'ensemble du détail est consultable depuis la base complète.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- APP (filtres + contenu interactif) -->
+<!-- APP (contenu interactif) -->
 <div id="app">
-<button class="sb-toggle" onclick="toggleFilters()" title="Afficher / masquer les filtres" aria-label="Filtres"><i class="fas fa-filter"></i></button>
-<div id="sb">
-  <div class="sb-ttl"><i class="fas fa-filter"></i> Filtres globaux</div>
-
-  <!-- Réinitialiser EN HAUT -->
-  <button class="btn-rst" onclick="resetF()"><i class="fas fa-rotate-left"></i> Réinitialiser tous les filtres</button>
-  <div id="active-filters-bar" class="active-filters-bar" style="margin-top:6px"></div>
-
-  <div class="fb"><label class="fl">Région</label>
-    <select id="fr"><option value="">Toutes les régions</option></select>
-  </div>
-  <div class="fb"><label class="fl">Nationalité</label>
-    <select id="fn"><option value="">Toutes les nationalités</option></select>
-  </div>
-  <div class="fb"><label class="fl">Pays de résidence</label>
-    <select id="fp"><option value="">Tous les pays</option></select>
-  </div>
-  <div class="fb"><label class="fl">Statut PPE</label>
-    <div class="sw-row">PPE uniquement <label class="tog"><input type="checkbox" id="fppe"><span class="ts"></span></label></div>
-  </div>
-</div>
-
 <div id="ct">
 
 <div id="fresh-banner" role="status"></div>
@@ -917,7 +880,6 @@ body:not(.home) #page-home{display:none!important}
   <div class="kr">
     <div class="kpi" style="border-top-color:var(--gd)"><div class="ki" style="color:var(--gd)"><i class="fas fa-building"></i></div><div><div class="kv" id="k-co">-</div><div class="kl">Entreprises</div></div></div>
     <div class="kpi" style="border-top-color:var(--g)"><div class="ki" style="color:var(--g)"><i class="fas fa-users"></i></div><div><div class="kv" id="k-be">-</div><div class="kl">Bénéficiaires</div></div></div>
-    <div class="kpi" style="border-top-color:var(--y)"><div class="ki" style="color:var(--y)"><i class="fas fa-calculator"></i></div><div><div class="kv" id="k-av">-</div><div class="kl">Moy./entreprise</div></div></div>
     <div class="kpi" style="border-top-color:var(--r)"><div class="ki" style="color:var(--r)"><i class="fas fa-user-shield"></i></div><div><div class="kv" id="k-pp">-</div><div class="kl">PPE</div></div></div>
     <div class="kpi" style="border-top-color:var(--yd)"><div class="ki" style="color:var(--yd)"><i class="fas fa-flag"></i></div><div><div class="kv" id="k-na">-</div><div class="kl">Nationalités</div></div></div>
     <div class="kpi" style="border-top-color:var(--y)"><div class="ki" style="color:var(--y)"><i class="fas fa-globe"></i></div><div><div class="kv" id="k-pa">-</div><div class="kl">Pays résidence</div></div></div>
@@ -934,7 +896,7 @@ body:not(.home) #page-home{display:none!important}
     <div class="card"><div class="ct"><i class="fas fa-gavel"></i> Répartition par greffe (RCCM)</div><div class="cw"><canvas id="ch-greffe"></canvas></div></div>
     <div class="card"><div class="ct"><i class="fas fa-network-wired"></i> Top bénéficiaires multi-entreprises</div><div class="tw"><table id="tbl-multi"><thead><tr><th>Bénéficiaire</th><th>Nationalité</th><th>Nb.</th></tr></thead><tbody></tbody></table></div></div>
   </div>
-  <div class="card card-quality"><div class="ct"><i class="fas fa-shield-halved"></i> Qualité du registre — complétude des champs</div><div id="quality-grid"></div></div>
+  <div class="card card-quality"><div class="ct"><i class="fas fa-shield-halved"></i> Qualité du registre - complétude des champs</div><div id="quality-grid"></div></div>
   <div class="card" style="position:relative">
     <div class="ct">
       <i class="fas fa-building"></i> Top 30 des entreprises selon le nombre de bénéficiaires
@@ -942,7 +904,7 @@ body:not(.home) #page-home{display:none!important}
         <i class="fas fa-file-export"></i> Exporter avec sélection
       </button>
     </div>
-    <div class="tw"><table id="tbl-top"><thead><tr><th>Entreprise</th><th>Région</th><th>Greffe</th><th>Bénéficiaires</th><th>Part. moy.</th><th>PPE</th></tr></thead><tbody></tbody></table></div>
+    <div class="tw"><table id="tbl-top"><thead><tr><th>Entreprise</th><th>Région</th><th>Greffe</th><th>Bénéficiaires</th><th>PPE</th></tr></thead><tbody></tbody></table></div>
   </div>
 </div>
 
@@ -1096,20 +1058,18 @@ body:not(.home) #page-home{display:none!important}
   <div class="card guide-hero">
     <div class="guide-hero-txt">
       <div class="ct"><i class="fas fa-book-open"></i> Guide d'utilisation</div>
-      <p class="guide-hero-sub">Tout ce qu'il faut savoir pour utiliser OpenRBE, expliqué simplement, onglet par onglet — sans aucune connaissance technique.</p>
+      <p class="guide-hero-sub">Tout ce qu'il faut savoir pour utiliser OpenRBE, expliqué simplement, onglet par onglet - sans aucune connaissance technique.</p>
     </div>
     <button class="nb gn guide-dl" onclick="downloadGuidePDF()"><i class="fas fa-file-pdf"></i> Télécharger en PDF</button>
   </div>
-  <div class="card"><div id="guide-body" class="guide-body"></div></div>
+  <div class="guide-layout">
+    <nav class="guide-toc" id="guide-toc"></nav>
+    <div class="card guide-card-body"><div id="guide-body" class="guide-body"></div></div>
+  </div>
 </div>
 
 </div></div>
 
-<!-- FOOTER -->
-<footer>
-  <span class="fb">OpenRBE</span> — Open Registre des Bénéficiaires Effectifs |
-  © CN-ITIE — Comité National ITIE Sénégal · 2025<br>
-</footer>
 
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut" aria-label="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 
@@ -1291,46 +1251,69 @@ function parseDate(v){
   return {da:`${String(d).padStart(2,'0')}/${String(mo).padStart(2,'0')}/${y}`,an:y};
 }
 
-/* Transforme les lignes CSV brutes en enregistrements (mêmes règles que build.py) */
+const noAccent=s=>(s==null?'':String(s)).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+/* ── Mapping robuste par nom de colonne ──────────────────────────────────────
+   Chaque champ interne est associé à une liste de synonymes normalisés.
+   La colonne est trouvée par son nom, pas par sa position.
+   Insensible aux accents, à la casse, aux espaces superflus.
+─────────────────────────────────────────────────────────────────────────────*/
+/* Colonnes fixes (ordre exact du fichier Excel source) :
+   0:Région 1:Denomination Sociale 2:Prénom et Nom Bénéficiaire 3:Date d'acquisition
+   4:% Action Direct 5:% Voix Direct 6:Nationalite 7:Pays de résidence
+   8:Est Une PPE 9:Fonction PPE 10:NomPPE 11:Greffe */
+const COL_POS={rs:0,ds:1,pn:2,da:3,pa:4,pv:5,na:6,pr:7,pp:8,fp:9,np:10,gr:11};
+
+function normHead(s){
+  return (s==null?'':String(s)).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[\s_\-\/\.\(\)%]+/g,'');
+}
+
+/* Trouve la ligne d'en-tête : cherche la première ligne contenant "denomination" ou "prenom" */
+function findHeader(rows){
+  for(let i=0;i<Math.min(12,rows.length);i++){
+    const normed=rows[i].map(normHead);
+    if(normed.some(h=>h.includes('denomination')||h.includes('prenom')||h.includes('beneficiaire')))
+      return {headerIdx:i, colIdx:COL_POS};
+  }
+  return null;
+}
+
+/* Transforme les lignes brutes en enregistrements (mapping positionnel) */
 function normalizeRows(rows){
   if(!rows.length)return [];
-  // Détecter et retirer la ligne d'en-tête
-  let start=0;
-  const head=(rows[0]||[]).join(' ').toLowerCase();
-  if(/d[ée]nomination|r[ée]gion|b[ée]n[ée]ficiaire/.test(head)) start=1;
+  const found=findHeader(rows);
+  if(!found)return [];
+  const {headerIdx}=found;
+  const g=(r,pos)=>r[pos]!==undefined?r[pos]:'';
   const out=[];let id=0;
-  for(let i=start;i<rows.length;i++){
-    const r=rows[i];if(!r)continue;
-    const g=k=>r[k]!==undefined?r[k]:'';
-    const ds=cleanCell(g(1));
-    if(!ds)continue;                       // ignorer lignes sans dénomination sociale
-    let region=cleanCell(g(0)); if(region)region=titleCase(region);
-    const {da,an}=parseDate(g(3));
-    let fp=cleanCell(g(9)); if(fp==='0'||fp==='1')fp=null;
+  let lastDs='',lastRs='',lastGr='';
+  for(let i=headerIdx+1;i<rows.length;i++){
+    const r=rows[i];
+    if(!r||r.every(c=>String(c==null?'':c).trim()===''))continue;
+    const ds=cleanCell(g(r,COL_POS.ds))||lastDs;
+    if(!ds)continue;
+    lastDs=ds;
+    let region=cleanCell(g(r,COL_POS.rs)); if(region)region=titleCase(region); if(!region)region=lastRs; else lastRs=region;
+    const gr=cleanCell(g(r,COL_POS.gr))||lastGr; if(gr)lastGr=gr;
+    const {da,an}=parseDate(g(r,COL_POS.da));
+    let fp=cleanCell(g(r,COL_POS.fp)); if(fp==='0'||fp==='1')fp=null;
     id++;
     out.push({
-      id, rs:region, ds, pn:cleanCell(g(2)),
+      id, rs:region, ds, pn:cleanCell(g(r,COL_POS.pn)),
       da, an,
-      pa:numClamp(g(4)), pv:numClamp(g(5)),
-      na:fixCountry(cleanCell(g(6))), pr:fixCountry(cleanCell(g(7))),
-      pp:isPPEcell(g(8)), fp, np:cleanCell(g(10)), gr:cleanCell(g(11)),
+      pa:numClamp(g(r,COL_POS.pa)), pv:numClamp(g(r,COL_POS.pv)),
+      na:fixCountry(cleanCell(g(r,COL_POS.na))), pr:fixCountry(cleanCell(g(r,COL_POS.pr))),
+      pp:isPPEcell(g(r,COL_POS.pp)), fp, np:cleanCell(g(r,COL_POS.np)), gr,
     });
   }
   return out;
 }
 
-/* Validation de structure : vérifie que les 13 colonnes attendues sont au bon endroit.
-   Évite d'afficher des données mal mappées si le Sheet est réorganisé/renommé. */
+/* Validation de structure */
 function checkStructure(rows){
   if(!rows||!rows.length) return {ok:false,reason:'Aucune ligne reçue de la source.'};
-  const head=(rows[0]||[]).map(x=>noAccent(String(x==null?'':x)));
-  const joined=head.join(' ');
-  if(!/denomination|beneficiaire|region/.test(joined))
-    return {ok:false,reason:'En-tête non reconnu : la première ligne ne ressemble pas à l\'en-tête RBE attendu.'};
-  const expect=[[0,'region'],[1,'denomination'],[2,'beneficiaire'],[3,'date'],[4,'action'],[5,'voix'],[6,'national'],[7,'pays'],[8,'ppe']];
-  const bad=expect.filter(([i,kw])=>!String(head[i]||'').includes(kw));
-  if(bad.length>2)
-    return {ok:false,reason:'Colonnes déplacées ou renommées : l\'ordre des colonnes attendu n\'est pas respecté.'};
+  const found=findHeader(rows);
+  if(!found)
+    return {ok:false,reason:'En-tête introuvable dans les 12 premières lignes.'};
   return {ok:true};
 }
 async function loadLiveData(opts={}){
@@ -1350,8 +1333,14 @@ async function loadLiveData(opts={}){
       if(bytes.length>1 && bytes[0]===0x50 && bytes[1]===0x4B){
         if(typeof XLSX==='undefined'){ lastErr='Lecteur xlsx non chargé.'; continue; }
         const wb=XLSX.read(buf,{type:'array'});
-        const ws=wb.Sheets[wb.SheetNames[0]];
-        rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''});
+        // Essayer toutes les feuilles jusqu'à trouver celle avec les bonnes colonnes
+        rows=null;
+        for(const name of wb.SheetNames){
+          const ws=wb.Sheets[name];
+          const candidate=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''});
+          if(findHeader(candidate)){rows=candidate;break;}
+        }
+        if(!rows){ lastErr='Aucune feuille Excel ne contient les colonnes RBE attendues.'; continue; }
       } else {
         const text=new TextDecoder('utf-8').decode(bytes);
         if(/^\s*(<html|<!doctype)|accounts\.google\.com/i.test(text.slice(0,400))){
@@ -1372,7 +1361,7 @@ async function loadLiveData(opts={}){
       refreshIndexes();
       reRenderEverything();
       setSyncStatus('live');
-      if(opts.notify)showToast(`Données actualisées en direct — ${fmt(recs.length)} enregistrements.`,'ok','fa-cloud-arrow-down');
+      if(opts.notify)showToast(`Données actualisées en direct - ${fmt(recs.length)} enregistrements.`,'ok','fa-cloud-arrow-down');
       return true;
     }catch(e){ lastErr=(e&&e.message)||String(e); }
   }
@@ -1440,16 +1429,15 @@ function reRenderEverything(){
 
 const COORDS={"Dakar":[14.693,-17.447],"Thiès":[14.788,-16.924],"Diourbel":[14.655,-16.232],"Fatick":[14.339,-16.411],"Kaolack":[14.152,-16.073],"Kédougou":[12.560,-12.186],"Mbour":[14.408,-16.965],"Tambacounda":[13.771,-13.667],"Ziguinchor":[12.565,-16.272],"Louga":[15.617,-16.224],"Saint-Louis":[16.028,-16.499],"Matam":[15.658,-13.263],"Kolda":[12.886,-14.944],"Sédhiou":[12.708,-15.557],"Kaffrine":[14.106,-15.551]};
 const CL={g:'#2799D7',gd:'#1C6FA5',y:'#5EB4DD',yd:'#1C6FA5',r:'#1C6FA5',b:'#2799D7'};
-const NR='<span class="nr">—</span>';
+const NR='<span class="nr">-</span>';
 const v=x=>(!x&&x!==0)?NR:esc(x);
-const vp=x=>(!x&&x!==0)?NR:esc(x)+'%';
+const vp=x=>(!x&&x!==0)?NR:esc(String(x).replace('.',','))+'%';
 const fmt=n=>Number(n).toLocaleString('fr-FR');
-// Normalisation : retire accents + minuscules (recherche tolérante)
-const noAccent=s=>(s==null?'':String(s)).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const fmtDec=x=>x==null?'-':String(Number(x).toFixed(1)).replace('.',',');
 // Échappement HTML : neutralise tout balisage injecté via les données de la source
 const esc=s=>(s==null?'':String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Lien de recherche Google : nom cliquable -> ouvre Google dans un nouvel onglet
-const gl=t=>t?`<a class="gs" href="https://www.google.com/search?q=${encodeURIComponent(t)}" target="_blank" rel="noopener" title="Rechercher sur Google">${esc(t)}</a>`:'—';
+const gl=t=>t?`<a class="gs" href="https://www.google.com/search?q=${encodeURIComponent(t)}" target="_blank" rel="noopener" title="Rechercher sur Google">${esc(t)}</a>`:'-';
 // Petite icône Google (pour les cellules ayant déjà une action de clic)
 const gs=t=>t?` <a class="gs gsi" href="https://www.google.com/search?q=${encodeURIComponent(t)}" target="_blank" rel="noopener" title="Rechercher sur Google" onclick="event.stopPropagation()"><i class="fab fa-google"></i></a>`:'';
 let FD=[...DB],charts={},leafMap=null,nNodes=[],nLinks=[],nZoom=null,nSvg=null;
@@ -1578,9 +1566,13 @@ document.querySelectorAll('.nav-bar a').forEach(a=>{
     const pg=a.dataset.page;
     document.getElementById('page-'+pg).classList.add('active');
     document.body.classList.toggle('home', pg==='home');
-    const FILTER_PAGES=['dashboard','map'];
+    const FILTER_PAGES=['dashboard','map','database','ppe','network'];
     document.body.classList.toggle('no-filters', !FILTER_PAGES.includes(pg) && pg!=='home');
     if(pg==='home')renderHomeNums();
+    // Réinitialiser les filtres silencieusement à chaque changement d'onglet
+    ['fr','fn','fp'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('fppe').checked=false;
+    applyF();
     setTimeout(updateNavTheme, 30);
     if(pg==='map'&&!leafMap)initMap();
     if(pg==='network')buildNet();
@@ -1604,14 +1596,22 @@ window.addEventListener('scroll',()=>{
    FILTRES
 ═══════════════════════════════════════════ */
 function popF(){
+  const REGIONS_SN=['Dakar','Diourbel','Fatick','Kaffrine','Kaolack','Kédougou','Kolda','Louga','Matam','Saint-Louis','Sédhiou','Tambacounda','Thiès','Ziguinchor'];
   const fill=(id,arr,ph)=>{
     const el=document.getElementById(id);
     const cur=el.value;
     el.innerHTML='<option value="">'+ph+'</option>';
     arr.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;el.appendChild(o);});
-    if(cur&&arr.includes(cur)) el.value=cur;   // conserver la sélection après actualisation
+    if(cur&&arr.includes(cur)) el.value=cur;
   };
-  fill('fr',[...new Set(DB.map(r=>r.rs).filter(Boolean))].sort(),'Toutes les régions');
+  const dbRegions=[...new Set(DB.map(r=>r.rs).filter(Boolean))].sort();
+  const otherRegions=REGIONS_SN.filter(r=>!dbRegions.includes(r)).sort();
+  const el=document.getElementById('fr');
+  const cur=el.value;
+  el.innerHTML='<option value="">Toutes les régions</option>';
+  dbRegions.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;el.appendChild(o);});
+  otherRegions.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;el.appendChild(o);});
+  if(cur&&el.querySelector(`option[value="${cur}"]`))el.value=cur;
   fill('fn',[...new Set(DB.map(r=>r.na).filter(Boolean))].sort(),'Toutes les nationalités');
   fill('fp',[...new Set(DB.map(r=>r.pr).filter(Boolean))].sort(),'Tous les pays');
 }
@@ -1652,7 +1652,7 @@ function resetF(){
 function stats(d){
   const co=[...new Set(d.map(r=>r.ds).filter(Boolean))];
   const pp=d.filter(r=>r.pp);
-  return{co,pp,na:[...new Set(d.map(r=>r.na).filter(Boolean))],pr:[...new Set(d.map(r=>r.pr).filter(Boolean))],avg:co.length?(d.length/co.length).toFixed(1):'—',total:d.length};
+  return{co,pp,na:[...new Set(d.map(r=>r.na).filter(Boolean))],pr:[...new Set(d.map(r=>r.pr).filter(Boolean))],avg:co.length?(d.length/co.length).toFixed(1):'-',total:d.length};
 }
 function compS(d){
   const m={};
@@ -1670,7 +1670,6 @@ function renderKPI(){
   const s=stats(FD);
   document.getElementById('k-co').textContent=fmt(s.co.length);
   document.getElementById('k-be').textContent=fmt(s.total);
-  document.getElementById('k-av').textContent=s.avg;
   document.getElementById('k-pp').textContent=s.pp.length;
   document.getElementById('k-na').textContent=s.na.length;
   document.getElementById('k-pa').textContent=s.pr.length;
@@ -1751,7 +1750,7 @@ function renderMulti(){
   const m={};
   FD.forEach(r=>{
     if(!r.pn)return;
-    if(!m[r.pn])m[r.pn]={pn:r.pn,na:r.na||'—',ents:new Set()};
+    if(!m[r.pn])m[r.pn]={pn:r.pn,na:r.na||'-',ents:new Set()};
     if(r.ds)m[r.pn].ents.add(r.ds);
   });
   const top=Object.values(m).map(x=>({pn:x.pn,na:x.na,n:x.ents.size})).filter(x=>x.n>=2).sort((a,b)=>b.n-a.n).slice(0,10);
@@ -1805,7 +1804,7 @@ function renderPct(){
 }
 function renderTop(){
   const tb=document.querySelector('#tbl-top tbody');tb.innerHTML='';
-  compS(FD).slice(0,30).forEach(c=>{const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${esc(c.ds)}</strong></td><td>${c.rs?'<span class="bg">'+esc(c.rs)+'</span>':NR}</td><td>${c.gr?'<span class="bgr">'+esc(c.gr)+'</span>':NR}</td><td><strong>${c.n}</strong></td><td>${c.avg!==null?c.avg+'%':NR}</td><td>${c.ppe>0?'<span class="br">'+c.ppe+' PPE</span>':'0'}</td>`;tb.appendChild(tr);});
+  compS(FD).slice(0,30).forEach(c=>{const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${esc(c.ds)}</strong></td><td>${c.rs?'<span class="bg">'+esc(c.rs)+'</span>':NR}</td><td>${c.gr?'<span class="bgr">'+esc(c.gr)+'</span>':NR}</td><td><strong>${c.n}</strong></td><td>${c.ppe>0?'<span class="br">'+c.ppe+' PPE</span>':'0'}</td>`;tb.appendChild(tr);});
 }
 
 /* BASE COMPLÈTE */
@@ -1832,7 +1831,7 @@ function renderDB(){
   dbF.slice(s,e).forEach((r,i)=>{
     const tr=document.createElement('tr');
     tr.className='db-row';tr.title='Voir la fiche détaillée';
-    tr.innerHTML=`<td style="color:var(--gray);font-size:.74rem;text-align:right">${s+i+1}</td><td><strong>${esc(r.ds)||'—'}</strong></td><td>${r.pn?esc(r.pn):NR}</td><td>${r.rs?'<span class="bg">'+esc(r.rs)+'</span>':NR}</td><td>${v(r.na)}</td><td>${v(r.pr)}</td><td style="text-align:center">${vp(r.pa)}</td><td style="text-align:center">${vp(r.pv)}</td><td style="text-align:center">${r.pp?'<span class="br">PPE</span>':''}</td><td>${v(r.fp)}</td><td>${v(r.np)}</td><td>${r.gr?'<span class="bgr">'+esc(r.gr)+'</span>':NR}</td><td style="white-space:nowrap;font-size:.79rem">${v(r.da)}</td><td style="text-align:center">${v(r.an)}</td>`;
+    tr.innerHTML=`<td style="color:var(--gray);font-size:.74rem;text-align:right">${s+i+1}</td><td><strong>${esc(r.ds)||'-'}</strong></td><td>${r.pn?esc(r.pn):NR}</td><td>${r.rs?'<span class="bg">'+esc(r.rs)+'</span>':NR}</td><td>${v(r.na)}</td><td>${v(r.pr)}</td><td style="text-align:center">${vp(r.pa)}</td><td style="text-align:center">${vp(r.pv)}</td><td style="text-align:center">${r.pp?'<span class="br">PPE</span>':''}</td><td>${v(r.fp)}</td><td>${v(r.np)}</td><td>${r.gr?'<span class="bgr">'+esc(r.gr)+'</span>':NR}</td><td style="white-space:nowrap;font-size:.79rem">${v(r.da)}</td><td style="text-align:center">${v(r.an)}</td>`;
     tr.addEventListener('click',()=>showDetail(r));
     tb.appendChild(tr);
   });
@@ -1863,9 +1862,9 @@ function renderHomeNums(){
   const co=document.getElementById('home-co'); if(!co)return;
   const t=(typeof DB!=='undefined'&&DB)||[]; const ents=new Set(), bens=new Set(); let pp=0;
   t.forEach(r=>{ if(r.ds)ents.add(r.ds); if(r.pn)bens.add(r.pn); if(r.pp)pp++; });
-  co.textContent=ents.size||'—';
-  document.getElementById('home-be').textContent=bens.size||'—';
-  document.getElementById('home-pp').textContent=pp||'—';
+  co.textContent=ents.size||'-';
+  document.getElementById('home-be').textContent=bens.size||'-';
+  document.getElementById('home-pp').textContent=pp||'-';
 }
 /* ─── Recherche universelle d'accueil ─── */
 function toggleFilters(){
@@ -2069,16 +2068,16 @@ function exportFichePDF(r,coBe,beCo){
   doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(15);
   doc.text('OpenRBE — Fiche du bénéficiaire effectif',40,29);
   doc.setTextColor(20,20,20);doc.setFontSize(15);
-  doc.splitTextToSize(r.ds||'—',W-80).forEach(l=>{doc.text(l,40,y);y+=18;});
+  doc.splitTextToSize(r.ds||'-',W-80).forEach(l=>{doc.text(l,40,y);y+=18;});
   doc.setDrawColor(200,200,200);doc.line(40,y,W-40,y);y+=20;
-  const rows=[['Bénéficiaire effectif',r.pn],['Région',r.rs],['Greffe',r.gr],['Nationalité',r.na],['Pays de résidence',r.pr],['% Action directe',r.pa!=null?r.pa+'%':'—'],['% Voix directe',r.pv!=null?r.pv+'%':'—'],['PPE',r.pp?'Oui':'Non'],['Fonction PPE',r.fp],['Nom PPE lié',r.np],["Date d'acquisition",r.da],['Année',r.an]];
+  const rows=[['Bénéficiaire effectif',r.pn],['Région',r.rs],['Greffe',r.gr],['Nationalité',r.na],['Pays de résidence',r.pr],['% Action directe',r.pa!=null?r.pa+'%':'-'],['% Voix directe',r.pv!=null?r.pv+'%':'-'],['PPE',r.pp?'Oui':'Non'],['Fonction PPE',r.fp],['Nom PPE lié',r.np],["Date d'acquisition",r.da],['Année',r.an]];
   doc.setFontSize(10.5);
-  rows.forEach(([l,val])=>{doc.setFont('helvetica','bold');doc.setTextColor(90,90,90);doc.text(l,40,y);doc.setFont('helvetica','normal');doc.setTextColor(20,20,20);doc.splitTextToSize(String(val==null||val===''?'—':val),W-280).forEach((ln,k)=>{doc.text(ln,250,y+k*14);});y+=Math.max(18,doc.splitTextToSize(String(val==null?'—':val),W-280).length*14+4);});
+  rows.forEach(([l,val])=>{doc.setFont('helvetica','bold');doc.setTextColor(90,90,90);doc.text(l,40,y);doc.setFont('helvetica','normal');doc.setTextColor(20,20,20);doc.splitTextToSize(String(val==null||val===''?'-':val),W-280).forEach((ln,k)=>{doc.text(ln,250,y+k*14);});y+=Math.max(18,doc.splitTextToSize(String(val==null?'-':val),W-280).length*14+4);});
   const block=(title,arr)=>{if(!arr.length)return;y+=10;if(y>H-90){doc.addPage();y=60;}doc.setFont('helvetica','bold');doc.setTextColor(28,111,165);doc.setFontSize(11);doc.text(title,40,y);y+=15;doc.setFont('helvetica','normal');doc.setTextColor(40,40,40);doc.setFontSize(9.5);doc.splitTextToSize(arr.join('  •  '),W-80).forEach(l=>{if(y>H-60){doc.addPage();y=60;}doc.text(l,40,y);y+=13;});};
   block('Autres bénéficiaires de cette entreprise :',coBe);
   block('Autres entreprises de ce bénéficiaire :',beCo);
   doc.setFontSize(8);doc.setTextColor(150,150,150);
-  doc.text('Source : CN-ITIE Sénégal — OpenRBE (Registre des Bénéficiaires Effectifs). Données déclaratives.',40,H-28);
+  doc.text('Source : CN-ITIE Sénégal - OpenRBE (Registre des Bénéficiaires Effectifs). Données déclaratives.',40,H-28);
   const safe=(r.ds||'fiche').normalize('NFD').replace(/[^a-z0-9]+/gi,'_').slice(0,40);
   doc.save('OpenRBE_'+safe+'.pdf');
   showToast('Fiche PDF téléchargée.','ok','fa-file-pdf');
@@ -2088,99 +2087,93 @@ function exportFichePDF(r,coBe,beCo){
    GUIDE NOVICE — contenu unique (HTML + PDF)
 ═══════════════════════════════════════════ */
 const GUIDE=[
- ["h1","1. Qu'est-ce qu'OpenRBE ?"],
- ["p","OpenRBE est un site web qui permet de **consulter, rechercher et visualiser** les données du Registre des Bénéficiaires Effectifs (RBE) des entreprises du secteur extractif au Sénégal, dans le cadre de l'ITIE (Initiative pour la Transparence dans les Industries Extractives)."],
- ["p","Concrètement, vous pouvez savoir **qui se cache derrière une entreprise** : les personnes physiques qui en sont les véritables propriétaires ou qui la contrôlent (les « bénéficiaires effectifs »)."],
- ["h2","Quelques mots de vocabulaire"],
- ["li","**Bénéficiaire effectif** : la personne physique (un individu, pas une société) qui possède ou contrôle réellement une entreprise."],
- ["li","**Entreprise (Dénomination sociale)** : la société déclarée au registre."],
- ["li","**% Action / % Voix** : la part du capital détenue et la part des droits de vote du bénéficiaire."],
- ["li","**PPE (Personne Politiquement Exposée)** : une personne qui occupe ou a occupé une fonction publique importante, faisant l'objet d'une vigilance particulière."],
- ["li","**Greffe** : le tribunal de commerce où l'entreprise est enregistrée."],
- ["li","**Région** : la région du Sénégal rattachée à l'entreprise."],
+ ["h1","1. À quoi sert OpenRBE ?"],
+ ["p","OpenRBE vous permet de savoir **qui possède réellement une entreprise extractive** au Sénégal. Le registre liste les personnes physiques (les « bénéficiaires effectifs ») derrière chaque société pétrolière, gazière ou minière, conformément à la Norme ITIE 2023."],
+ ["p","Vous pouvez **rechercher, filtrer, visualiser et exporter** ces données - sans compte, sans installation, directement dans votre navigateur."],
+ ["h2","Vocabulaire essentiel"],
+ ["li","**Bénéficiaire effectif** : la personne physique qui possède ou contrôle réellement l'entreprise (pas une autre société)."],
+ ["li","**% Action / % Voix** : part du capital et part des droits de vote détenus par le bénéficiaire."],
+ ["li","**PPE** : Personne Politiquement Exposée - occupe ou a occupé une fonction publique importante."],
+ ["li","**Greffe** : tribunal de commerce où l'entreprise est immatriculée (RCCM)."],
 
- ["h1","2. Vue d'ensemble de l'écran"],
- ["p","Quand vous ouvrez OpenRBE, l'écran se compose de quatre zones :"],
- ["li","**L'en-tête (en haut)** : le logo OpenRBE. Un clic dessus ouvre le site officiel de l'ITIE Sénégal."],
- ["li","**La barre d'onglets** : les onglets pour naviguer entre les différents écrans."],
- ["li","**Le bandeau de filtres (à gauche)** : les filtres globaux qui s'appliquent à tous les écrans."],
- ["li","**La zone principale (au centre)** : le contenu de l'onglet sélectionné."],
- ["note","Sur téléphone, le bandeau de filtres se replie au-dessus du contenu et la barre d'onglets défile horizontalement."],
+ ["img","docs/screenshots/accueil.png","Page d'accueil - OpenRBE"],
+ ["h1","2. Comment naviguer dans le site"],
+ ["p","La barre en haut de l'écran contient les onglets. **Cliquez un onglet** pour changer de section. Le filtre se trouve en haut à droite de la barre - cliquez l'icône entonnoir pour l'ouvrir. Le **logo CN-ITIE** (en haut à gauche) ouvre le site officiel de l'ITIE Sénégal dans un nouvel onglet."],
+ ["li","**Accueil** : recherche rapide et textes juridiques."],
+ ["li","**Tableau de bord** : vue d'ensemble chiffrée et graphiques."],
+ ["li","**Base complète** : toutes les déclarations sous forme de tableau."],
+ ["li","**Recherche** : chercher une entreprise ou un bénéficiaire précis."],
+ ["li","**Analyse PPE** : focus sur les Personnes Politiquement Exposées."],
+ ["li","**Réseaux** : visualiser les liens de propriété."],
+ ["li","**Cartographie** : localiser l'activité par région sur la carte."],
+ ["note","Chaque fois que vous changez d'onglet, les filtres se remettent à zéro automatiquement."],
 
- ["h1","3. Les filtres globaux (bandeau de gauche)"],
- ["p","C'est l'outil le plus puissant de la plateforme. Les filtres réglés ici **s'appliquent partout en même temps** : tableau de bord, base, recherche, réseau, carte, PPE. Tout se met à jour automatiquement."],
- ["li","**Région** : n'afficher que les entreprises d'une région donnée."],
- ["li","**Nationalité** : ne garder que les bénéficiaires d'une nationalité."],
- ["li","**Pays de résidence** : filtrer selon le pays où réside le bénéficiaire."],
- ["li","**PPE uniquement** : un interrupteur qui ne montre que les Personnes Politiquement Exposées."],
- ["p","**Comment faire :** choisissez une valeur dans une liste déroulante, et le reste de la plateforme se recalcule instantanément. Les filtres actifs apparaissent en étiquettes (cliquez la croix pour en retirer un) ; le bouton « Réinitialiser » efface tout d'un coup."],
- ["note","Bon à savoir : toutes les recherches **ignorent les accents et les majuscules**. Taper « senegal » trouve « SÉNÉGAL »."],
+ ["h1","3. Utiliser les filtres"],
+ ["p","Cliquez l'icône **entonnoir (Filtres)** dans la barre de navigation pour ouvrir le panneau. Les filtres s'appliquent **à tous les onglets simultanément** - le tableau de bord, la base, les graphiques et la carte se recalculent en temps réel."],
+ ["li","**Pour filtrer par région** : ouvrez le filtre → choisissez une région dans la liste déroulante → fermez le panneau. Les régions présentes dans la base apparaissent en premier."],
+ ["li","**Pour filtrer par nationalité** : même démarche avec la liste « Nationalité »."],
+ ["li","**Pour filtrer par pays de résidence** : même démarche avec la liste « Pays de résidence »."],
+ ["li","**Pour n'afficher que les PPE** : cochez la case « PPE uniquement »."],
+ ["li","**Pour tout effacer** : cliquez « Réinitialiser les filtres » dans le panneau."],
+ ["note","Les accents et majuscules sont ignorés partout. Taper « dakar » trouve « Dakar » et « DAKAR »."],
 
- ["h1","4. Les onglets, un par un"],
- ["h2","A. Tableau de bord"],
- ["p","La page d'accueil : une vue d'ensemble chiffrée et visuelle."],
- ["li","**Indicateurs clés** : Entreprises, Bénéficiaires, Moyenne par entreprise, PPE, Nationalités, Pays de résidence."],
- ["li","**Graphiques** : répartition par nationalité (Top 15), statut PPE, répartition régionale, et distribution des participations."],
- ["li","**Top 30 des entreprises** selon le nombre de bénéficiaires, avec un bouton d'export."],
- ["note","Chaque graphique possède un bouton de téléchargement (en haut à droite) pour l'enregistrer en image PNG."],
- ["h2","B. Base complète"],
- ["p","Le tableau exhaustif de **toutes les déclarations** : une ligne = un lien entre une entreprise et un bénéficiaire."],
- ["li","**Rechercher** : filtrage instantané (sans accent, sans souci de majuscules)."],
- ["li","**Trier** : cliquez l'en-tête d'une colonne ; un second clic inverse l'ordre (la flèche de tri change de sens)."],
- ["li","**Voir le détail** : cliquez n'importe quelle ligne pour ouvrir sa fiche détaillée."],
- ["li","**Exporter** : enregistrez les données affichées en CSV ou Excel."],
- ["h2","C. La recherche universelle"],
- ["p","Située en haut de la page d'accueil, elle remplace tout. Tapez n'importe quel mot (nom d'entreprise, de personne, ville, nationalité...) : les correspondances apparaissent en direct, classées par type (entreprise ou bénéficiaire). Un clic ouvre la fiche correspondante."],
- ["li","**Résultats instantanés** : entreprises et personnes affichées ensemble dès deux lettres saisies."],
- ["li","**Suggestions cliquables** sous la barre pour démarrer rapidement."],
- ["li","Si vous appuyez sur Entrée sans résultat unique, vous arrivez dans la **base complète** avec votre terme déjà appliqué comme filtre."],
- ["h2","D. Analyse PPE"],
- ["p","Entièrement consacré aux Personnes Politiquement Exposées : indicateurs dédiés, graphiques (par nationalité, par région) et un tableau cliquable ouvrant la fiche détaillée. L'écran idéal pour repérer les profils sensibles."],
- ["h2","E. Réseaux"],
- ["p","Les liens de propriété sous forme de graphe interactif : chaque entreprise et chaque bénéficiaire est un nœud."],
- ["li","**Se déplacer** : cliquez-glissez dans le vide."],
- ["li","**Zoomer / dézoomer** : molette de la souris (ou pincement tactile)."],
- ["li","**Cibler un nœud** : choisissez une entité dans les champs ; le graphe zoome dessus."],
- ["li","**Recentrer** : réajuste la vue pour faire tenir tout le réseau à l'écran."],
- ["h2","F. Cartographie"],
- ["p","Une carte du Sénégal localisant l'activité par région."],
- ["li","**Choisir l'indicateur** : Bénéficiaires, Entreprises ou PPE."],
- ["li","**Voir le détail** : cliquez un cercle pour les informations de la zone."],
- ["li","**Recentrer sur le Sénégal** : remet la carte dans sa position initiale."],
+ ["img","docs/screenshots/recherche.png","Barre de recherche avec résultats en direct"],
+ ["h1","4. Faire une recherche rapide (page Accueil)"],
+ ["p","Sur la page d'accueil, une barre de recherche vous permet de trouver n'importe quoi en quelques lettres."],
+ ["li","**Tapez au moins 2 lettres** : les résultats apparaissent en temps réel, classés par entreprises et bénéficiaires."],
+ ["li","**Cliquez un résultat** dans la liste pour ouvrir sa fiche détaillée."],
+ ["li","**Appuyez sur Entrée** pour basculer vers la Base complète avec votre terme appliqué comme filtre de recherche."],
 
- ["h1","5. La fiche détaillée"],
- ["p","La « carte d'identité » complète d'une déclaration. Elle s'ouvre dès que vous cliquez sur une ligne (Base complète ou tableau PPE)."],
- ["li","**Tous les champs** : entreprise, bénéficiaire, région, greffe, nationalité, résidence, % action, % voix, statut et fonction PPE, date, etc."],
- ["li","**Connexions cliquables** : autres bénéficiaires de l'entreprise, autres entreprises du bénéficiaire — pour naviguer de proche en proche."],
- ["li","**Boutons** : Télécharger en PDF, Voir l'entreprise / Voir le bénéficiaire."],
+ ["img","docs/screenshots/dashboard.png","Tableau de bord - indicateurs et graphiques"],
+ ["h1","5. Consulter la Base complète"],
+ ["p","L'onglet **Base complète** affiche toutes les déclarations. Une ligne = un lien entre une entreprise et l'un de ses bénéficiaires."],
+ ["li","**Pour chercher** : tapez dans la barre de recherche en haut du tableau. Le filtrage se fait instantanément."],
+ ["li","**Pour trier** : cliquez l'en-tête d'une colonne. Cliquez à nouveau pour inverser l'ordre."],
+ ["li","**Pour voir le détail** : cliquez n'importe quelle ligne. La fiche complète s'ouvre."],
+ ["li","**Pour changer le nombre de lignes** : utilisez le sélecteur en bas à droite (10, 25, 50, 100...)."],
+ ["li","**Pour exporter** : cliquez « Exporter avec sélection », choisissez le format (CSV ou Excel) et les colonnes souhaitées."],
+ ["note","L'export respecte les filtres actifs. Si vous avez filtré sur Dakar, seules les lignes de Dakar sont exportées."],
 
- ["h1","6. Exporter les données"],
- ["li","**Tableaux (Base, Top 30, PPE)** : bouton d'export, choix du format (CSV ou Excel) et des colonnes à inclure."],
- ["li","**Graphiques** : téléchargement en image PNG."],
- ["li","**Fiche détaillée** : bouton Télécharger en PDF."],
- ["note","Les exports respectent les filtres globaux : si vous avez filtré sur une région, l'export ne contiendra que cette région."],
+ ["img","docs/screenshots/database.png","Base complète des bénéficiaires effectifs"],
+ ["h1","6. Ouvrir une fiche détaillée"],
+ ["p","**Cliquez une ligne** dans la Base complète, le tableau PPE ou un résultat de recherche. La fiche affiche :"],
+ ["li","Tous les champs de la déclaration : entreprise, bénéficiaire, région, greffe, nationalité, pays de résidence, % action, % voix, statut PPE, date d'acquisition."],
+ ["li","**Les autres bénéficiaires de la même entreprise** : cliquez un nom pour voir sa fiche."],
+ ["li","**Les autres entreprises du même bénéficiaire** : cliquez une entreprise pour voir sa fiche."],
+ ["li","Bouton **Télécharger en PDF** pour enregistrer la fiche."],
 
- ["h1","7. Fraîcheur des données et mode hors-ligne"],
- ["p","OpenRBE lit les données **en direct** depuis le registre publié ; la plupart du temps, vous n'avez rien à faire. Si la mise à jour échoue (coupure réseau, source indisponible), un bandeau orange prévient que vous consultez une **version de secours**, avec la date des données et un bouton Réessayer. C'est le seul message affiché, et uniquement en cas de problème."],
+ ["img","docs/screenshots/ppe.png","Analyse PPE - Personnes Politiquement Exposées"],
+ ["h1","7. Analyser les PPE"],
+ ["p","Allez dans l'onglet **Analyse PPE**. Vous y trouvez uniquement les bénéficiaires déclarés comme Personnes Politiquement Exposées."],
+ ["li","Lisez les indicateurs en haut (nombre de PPE, entreprises concernées, nationalités)."],
+ ["li","Consultez les graphiques de répartition."],
+ ["li","**Cliquez une ligne du tableau** pour ouvrir la fiche détaillée de la PPE."],
 
- ["h1","8. Astuces pour bien démarrer"],
- ["li","Commencez par le **Tableau de bord**, puis affinez avec les **filtres globaux**."],
- ["li","Une question sur une entreprise précise ? → onglet **Recherche**."],
- ["li","Tout voir et trier ? → onglet **Base complète**."],
- ["li","Enquêter sur des liens ? → onglet **Réseaux**."],
- ["li","Profils sensibles ? → onglet **Analyse PPE**."],
- ["li","Les accents et majuscules n'ont **aucune importance** dans les recherches."],
+ ["img","docs/screenshots/reseau.png","Réseaux de propriété effective"],
+ ["h1","8. Explorer les réseaux de propriété"],
+ ["p","L'onglet **Réseaux** affiche un graphe interactif des liens entre entreprises et bénéficiaires."],
+ ["li","**Se déplacer dans le graphe** : cliquez-glissez dans une zone vide."],
+ ["li","**Zoomer / dézoomer** : molette de la souris (ou pincement sur écran tactile)."],
+ ["li","**Isoler une entité** : tapez son nom dans les champs au-dessus du graphe, puis cliquez-la."],
+ ["li","**Recentrer la vue** : cliquez le bouton « Recentrer »."],
 
- ["h1","9. En résumé"],
- ["table",["Je veux…","J'utilise…"],[
-   ["Une vue d'ensemble chiffrée","Tableau de bord"],
-   ["Tout consulter, trier, exporter","Base complète"],
-   ["Enquêter sur une entreprise ou une personne","Barre de recherche (page d'accueil)"],
-   ["Étudier les personnes politiquement exposées","Analyse PPE"],
-   ["Visualiser les liens de propriété","Réseaux"],
-   ["Localiser l'activité au Sénégal","Cartographie"],
-   ["La fiche complète d'une déclaration","Cliquer une ligne → Fiche détaillée"],
-   ["Réduire l'affichage à un critère","Filtres globaux (à gauche)"]
+ ["h1","9. Utiliser la Cartographie"],
+ ["p","L'onglet **Cartographie** affiche une carte du Sénégal avec les cercles proportionnels par région."],
+ ["li","**Choisir l'indicateur** : cliquez « Bénéficiaires », « Entreprises » ou « PPE » pour changer ce qui est représenté."],
+ ["li","**Voir le détail d'une région** : cliquez le cercle correspondant."],
+ ["li","**Recentrer la carte** : cliquez le bouton dédié pour revenir à la vue initiale du Sénégal."],
+
+ ["h1","10. En résumé"],
+ ["table",["Je veux…","Ce que je fais"],[
+   ["Trouver une entreprise ou une personne","Page Accueil → barre de recherche → taper le nom"],
+   ["Voir toutes les données et les trier","Onglet Base complète → cliquer l'en-tête de colonne"],
+   ["Filtrer par région / nationalité","Clic sur Filtres (entonnoir) → choisir dans la liste"],
+   ["Analyser les PPE","Onglet Analyse PPE"],
+   ["Voir les liens entre entités","Onglet Réseaux"],
+   ["Localiser l'activité sur la carte","Onglet Cartographie"],
+   ["Ouvrir la fiche complète","Cliquer une ligne du tableau"],
+   ["Exporter les données","Bouton « Exporter avec sélection » dans le tableau"],
+   ["Télécharger les textes juridiques","Page Accueil → section Textes officiels → bouton PDF"]
  ]]
 ];
 
@@ -2199,11 +2192,41 @@ function renderGuide(){
     else if(t==='h2') h+='<h4 class="guide-h2">'+mdBold(b[1])+'</h4>';
     else if(t==='p') h+='<p class="guide-p">'+mdBold(b[1])+'</p>';
     else if(t==='note') h+='<div class="guide-note"><i class="fas fa-lightbulb"></i><span>'+mdBold(b[1])+'</span></div>';
+    else if(t==='img') h+='<div class="guide-img-wrap"><img src="'+b[1]+'" alt="'+esc(b[2])+'" class="guide-img" loading="lazy"><span class="guide-img-cap">'+esc(b[2])+'</span></div>';
     else if(t==='table'){ h+='<table class="guide-tbl"><thead><tr>'+b[1].map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+b[2].map(r=>'<tr>'+r.map(c=>'<td>'+mdBold(c)+'</td>').join('')+'</tr>').join('')+'</tbody></table>'; }
   });
   closeUl();
+  // Add IDs to h1 headings for anchor links
+  let idx=0;
+  h=h.replace(/<h3 class="guide-h1">/g,()=>'<h3 class="guide-h1" id="g-s'+(idx++)+'">');
   host.innerHTML=h;
+  // Build TOC
+  const toc=document.getElementById('guide-toc');
+  if(toc){
+    let th='<div class="guide-toc-title">Sommaire</div>';
+    GUIDE.filter(b=>b[0]==='h1').forEach((b,i)=>{
+      th+='<a href="#g-s'+i+'" onclick="tocClick(event,\'g-s'+i+'\')">'+esc(b[1])+'</a>';
+    });
+    toc.innerHTML=th;
+  }
+  // Scroll spy
+  window.addEventListener('scroll',updateTocActive,{passive:true});
   guideRendered=true;
+}
+
+function tocClick(e,id){
+  e.preventDefault();
+  const el=document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function updateTocActive(){
+  const headings=document.querySelectorAll('#page-guide .guide-h1');
+  let active=null;
+  headings.forEach(h=>{if(h.getBoundingClientRect().top<=80)active=h.id;});
+  document.querySelectorAll('.guide-toc a').forEach(a=>{
+    a.classList.toggle('toc-active',a.getAttribute('href')==='#'+active);
+  });
 }
 
 function downloadGuidePDF(){
@@ -2211,48 +2234,116 @@ function downloadGuidePDF(){
   if(!J){showToast('Module PDF non chargé.','err','fa-triangle-exclamation');return;}
   const doc=new J({unit:'pt',format:'a4'});
   const W=doc.internal.pageSize.getWidth(), H=doc.internal.pageSize.getHeight();
-  const ML=48, MR=48, TW=W-ML-MR; let y=120;
-  const strip=s=>s.replace(/\*\*(.+?)\*\*/g,'$1').replace(/→/g,'›');
-  doc.setFillColor(28,111,165);doc.rect(0,0,W,90,'F');
-  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(21);
-  doc.text('OpenRBE',ML,46);
-  doc.setFont('helvetica','normal');doc.setFontSize(12);
-  doc.text("Guide d'utilisation — pour bien démarrer",ML,69);
-  const needNew=ex=>{ if(y+ex>H-50){ doc.addPage(); y=64; } };
+  const ML=52, MR=52, TW=W-ML-MR;
+  const C1=[28,111,165], C2=[0,61,97], CG=[60,72,84], CLG=[130,145,158], CBORD=[213,222,230];
+  const strip=s=>String(s||'-').replace(/\*\*(.+?)\*\*/g,'$1').replace(/[→]/g,'>').replace(/&nbsp;/g,' ');
+
+  // ── COVER PAGE ──
+  doc.setFillColor(...C1);doc.rect(0,0,W,H,'F');
+  doc.setFillColor(255,255,255);doc.rect(ML-10,H/2-120,TW+20,200,'F');
+  doc.setTextColor(...C1);doc.setFont('helvetica','bold');doc.setFontSize(32);
+  doc.text('OpenRBE',ML,H/2-68);
+  doc.setFont('helvetica','normal');doc.setFontSize(14);doc.setTextColor(...CG);
+  doc.text("Registre des Bénéficiaires Effectifs",ML,H/2-46);
+  doc.setDrawColor(...C1);doc.setLineWidth(2);doc.line(ML,H/2-34,ML+TW,H/2-34);
+  doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(...C2);
+  doc.text("Guide d'utilisation",ML,H/2-14);
+  doc.setFont('helvetica','normal');doc.setFontSize(11);doc.setTextColor(...CG);
+  doc.text("Tout ce qu'il faut savoir pour utiliser OpenRBE,",ML,H/2+12);
+  doc.text("sans aucune connaissance technique.",ML,H/2+28);
+  doc.setFontSize(9);doc.setTextColor(200,220,240);
+  doc.text('CN-ITIE Senegal  |  itie.sn',ML,H-40);
+  doc.addPage();
+
+  // ── CONTENT PAGES ──
+  let y=72;
+  const needNew=ex=>{ if(y+ex>H-56){ addFooter(); doc.addPage(); y=60; } };
+  function addFooter(){
+    const pg=doc.internal.getCurrentPageInfo().pageNumber;
+    doc.setFontSize(8);doc.setTextColor(...CLG);
+    doc.setFont('helvetica','normal');
+    doc.text("OpenRBE — Guide d'utilisation · CN-ITIE Sénégal",ML,H-28);
+    doc.text('Page '+pg,W-MR,H-28,{align:'right'});
+    doc.setDrawColor(...CBORD);doc.setLineWidth(.5);doc.line(ML,H-38,W-MR,H-38);
+  }
+  // Running header after cover
+  function addHeader(){
+    doc.setFillColor(245,248,251);doc.rect(0,0,W,44,'F');
+    doc.setDrawColor(...CBORD);doc.setLineWidth(.5);doc.line(0,44,W,44);
+    doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(...C1);
+    doc.text('OpenRBE',ML,28);
+    doc.setFont('helvetica','normal');doc.setTextColor(...CLG);
+    doc.text("Guide d'utilisation",ML+58,28);
+  }
+  addHeader();
+
   function writeLines(text,o){
-    const lh=o.lh||o.size*1.35, ind=o.indent||0, bul=o.bullet;
-    doc.setFont('helvetica',o.font||'normal');doc.setFontSize(o.size);doc.setTextColor(o.c[0],o.c[1],o.c[2]);
-    const lines=doc.splitTextToSize(text, TW-ind-(bul?12:0));
-    lines.forEach((ln,i)=>{ needNew(lh);
-      if(bul&&i===0){ doc.setFillColor(39,153,215);doc.circle(ML+ind+3, y-3.2, 1.7,'F'); }
-      doc.text(ln, ML+ind+(bul?12:0), y); y+=lh; });
+    const lh=o.lh||o.size*1.45, ind=o.indent||0, bul=o.bullet;
+    doc.setFont('helvetica',o.font||'normal');doc.setFontSize(o.size);
+    doc.setTextColor(o.c[0],o.c[1],o.c[2]);
+    const lines=doc.splitTextToSize(text, TW-ind-(bul?14:0));
+    lines.forEach((ln,i)=>{
+      needNew(lh);
+      if(bul&&i===0){doc.setFillColor(...C1);doc.circle(ML+ind+3.5,y-3,2,'F');}
+      doc.text(ln,ML+ind+(bul?14:0),y);y+=lh;
+    });
   }
   GUIDE.forEach(b=>{
     const t=b[0];
-    if(t==='h1'){ y+=12; needNew(30); doc.setDrawColor(28,111,165);doc.setLineWidth(3);doc.line(ML,y-13,ML+22,y-13);
-      writeLines(strip(b[1]),{size:14,c:[28,111,165],font:'bold',lh:19}); y+=4; }
-    else if(t==='h2'){ y+=8; writeLines(strip(b[1]),{size:11.5,c:[0,61,97],font:'bold',lh:16}); y+=2; }
-    else if(t==='p'){ writeLines(strip(b[1]),{size:10,c:[44,54,64],lh:14}); y+=6; }
-    else if(t==='li'){ writeLines(strip(b[1]),{size:10,c:[44,54,64],lh:13.5,indent:10,bullet:true}); y+=2; }
-    else if(t==='note'){ const lines=doc.splitTextToSize(strip(b[1]),TW-24); const bh=lines.length*13+14;
-      needNew(bh+6); doc.setFillColor(232,244,251);doc.setDrawColor(111,184,221);doc.setLineWidth(.8);
-      doc.roundedRect(ML,y-10,TW,bh,4,4,'FD');
-      doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(28,111,165);
-      let yy=y+5; lines.forEach(ln=>{doc.text(ln,ML+12,yy);yy+=13;}); y+=bh+8; }
-    else if(t==='table'){ y+=8; const cols=b[1], rows=b[2], cw=[TW*0.52,TW*0.48];
-      const drawRow=(cells,head)=>{ doc.setFont('helvetica',head?'bold':'normal');doc.setFontSize(9.5);
-        const wr=cells.map((c,i)=>doc.splitTextToSize(strip(c),cw[i]-12));
-        const rh=Math.max.apply(null,wr.map(w=>w.length))*12+9; needNew(rh);
-        if(head){doc.setFillColor(28,111,165);doc.rect(ML,y-11,TW,rh,'F');doc.setTextColor(255,255,255);}
-        else{doc.setTextColor(44,54,64);}
-        let x=ML; wr.forEach((w,i)=>{let yy=y; w.forEach(ln=>{doc.text(ln,x+6,yy);yy+=12;}); x+=cw[i];});
-        doc.setDrawColor(220,225,232);doc.line(ML,y-11+rh,ML+TW,y-11+rh); y+=rh; };
-      drawRow(cols,true); rows.forEach(r=>drawRow(r,false)); y+=8; }
+    if(t==='img') return; // skip images in PDF
+    if(t==='h1'){
+      y+=16; needNew(36);
+      doc.setFillColor(240,246,252);doc.rect(ML-8,y-18,TW+16,28,'F');
+      doc.setFillColor(...C1);doc.rect(ML-8,y-18,4,28,'F');
+      writeLines(strip(b[1]),{size:13,c:C1,font:'bold',lh:20}); y+=6;
+    }
+    else if(t==='h2'){
+      y+=10; needNew(22);
+      writeLines(strip(b[1]),{size:11,c:C2,font:'bold',lh:17}); y+=3;
+    }
+    else if(t==='p'){
+      needNew(16);
+      writeLines(strip(b[1]),{size:10,c:CG,lh:15}); y+=5;
+    }
+    else if(t==='li'){
+      needNew(16);
+      writeLines(strip(b[1]),{size:10,c:CG,lh:14,indent:14,bullet:true}); y+=3;
+    }
+    else if(t==='note'){
+      const lines=doc.splitTextToSize(strip(b[1]),TW-28); const bh=lines.length*14+18;
+      needNew(bh+10);
+      doc.setFillColor(232,244,251);doc.setDrawColor(111,184,221);doc.setLineWidth(1);
+      doc.roundedRect(ML,y-12,TW,bh,5,5,'FD');
+      doc.setFont('helvetica','italic');doc.setFontSize(9.5);doc.setTextColor(...C1);
+      let yy=y+4; lines.forEach(ln=>{doc.text(ln,ML+14,yy);yy+=14;}); y+=bh+10;
+    }
+    else if(t==='table'){
+      y+=10; const cols=b[1], rows=b[2], cw=[TW*0.50,TW*0.50];
+      const altC=[246,249,252];
+      const drawRow=(cells,head,alt)=>{
+        doc.setFont('helvetica',head?'bold':'normal');doc.setFontSize(9.5);
+        const wr=cells.map((c,i)=>doc.splitTextToSize(strip(c),cw[i]-16));
+        const rh=Math.max(...wr.map(w=>w.length))*13+10; needNew(rh);
+        if(head){doc.setFillColor(...C1);doc.rect(ML,y-12,TW,rh,'F');doc.setTextColor(255,255,255);}
+        else if(alt){doc.setFillColor(...altC);doc.rect(ML,y-12,TW,rh,'F');doc.setTextColor(...CG);}
+        else{doc.setTextColor(...CG);}
+        let x=ML; wr.forEach((w,i)=>{let yy=y; w.forEach(ln=>{doc.text(ln,x+8,yy);yy+=13;}); x+=cw[i];});
+        doc.setDrawColor(...CBORD);doc.setLineWidth(.4);doc.line(ML,y-12+rh,ML+TW,y-12+rh);
+        y+=rh;
+      };
+      drawRow(cols,true); rows.forEach((r,i)=>drawRow(r,false,i%2===0)); y+=10;
+    }
   });
-  const n=doc.internal.getNumberOfPages();
-  for(let i=1;i<=n;i++){ doc.setPage(i);doc.setFontSize(8);doc.setTextColor(150,150,150);
-    doc.text('OpenRBE — Guide d’utilisation · CN-ITIE Sénégal',ML,H-26);
-    doc.text('Page '+i+' / '+n, W-MR, H-26, {align:'right'}); }
+  addFooter();
+  // Add footers to all content pages
+  const totalPg=doc.internal.getNumberOfPages();
+  for(let i=2;i<=totalPg;i++){
+    doc.setPage(i); addHeader();
+    doc.setFontSize(8);doc.setTextColor(...CLG);
+    doc.text("OpenRBE — Guide d'utilisation · CN-ITIE Sénégal",ML,H-28);
+    doc.text('Page '+(i-1)+' / '+(totalPg-1),W-MR,H-28,{align:'right'});
+    doc.setDrawColor(...CBORD);doc.setLineWidth(.5);doc.line(ML,H-38,W-MR,H-38);
+  }
   doc.save('Guide_OpenRBE.pdf');
   showToast('Guide PDF téléchargé.','ok','fa-file-pdf');
 }
@@ -2411,8 +2502,8 @@ function renderBeneficiaire(nom){
   const ppes    = rows.filter(r=>r.pp);
   const pcts    = rows.map(r=>r.pa).filter(x=>x!==null);
   const pcts_v  = rows.map(r=>r.pv).filter(x=>x!==null);
-  const avg     = pcts.length  ?(pcts.reduce((a,b)=>a+b,0)/pcts.length).toFixed(1):null;
-  const avg_v   = pcts_v.length?(pcts_v.reduce((a,b)=>a+b,0)/pcts_v.length).toFixed(1):null;
+  const avg     = pcts.length  ?fmtDec(pcts.reduce((a,b)=>a+b,0)/pcts.length):null;
+  const avg_v   = pcts_v.length?fmtDec(pcts_v.reduce((a,b)=>a+b,0)/pcts_v.length):null;
   const dates   = rows.map(r=>r.da).filter(Boolean).sort();
   const annees  = [...new Set(rows.map(r=>r.an).filter(Boolean))].sort();
   const sfx     = nom.replace(/[^a-zA-Z0-9]/g,'_').substring(0,30);
@@ -2430,8 +2521,6 @@ function renderBeneficiaire(nom){
     <div class="ccs">
       <div><span class="csv2">${rows.length}</span><span class="csl">Entreprise${rows.length>1?'s':''}</span></div>
       <div><span class="csv2 ${isPPE?'red':''}">${isPPE?ppes.length:'0'}</span><span class="csl">PPE</span></div>
-      <div><span class="csv2">${avg!==null?avg+'%':'—'}</span><span class="csl">Part. moy. action</span></div>
-      <div><span class="csv2">${avg_v!==null?avg_v+'%':'—'}</span><span class="csl">Part. moy. voix</span></div>
     </div>
     <div class="ccd">
       <div><div class="cdl"><i class="fas fa-flag"></i> Nationalité(s)</div>${nats.length?nats.join(' • '):NR}</div>
@@ -2474,7 +2563,7 @@ function renderCC(nm){
   const pays=[...new Set(rows.map(r=>r.pr).filter(Boolean))].sort();
   const ppes=rows.filter(r=>r.pp);
   const pcts=rows.map(r=>r.pa).filter(x=>x!==null);
-  const avg=pcts.length?(pcts.reduce((a,b)=>a+b,0)/pcts.length).toFixed(1):null;
+  const avg=pcts.length?fmtDec(pcts.reduce((a,b)=>a+b,0)/pcts.length):null;
   const med=pcts.length?pcts.sort((a,b)=>a-b)[Math.floor(pcts.length/2)]:null;
   const dates=rows.map(r=>r.da).filter(Boolean).sort();
   const annees=[...new Set(rows.map(r=>r.an).filter(Boolean))].sort();
@@ -2490,8 +2579,6 @@ function renderCC(nm){
     <div class="ccs">
       <div><span class="csv2">${rows.length}</span><span class="csl">Bénéficiaire(s)</span></div>
       <div><span class="csv2 ${ppes.length>0?'red':''}">${ppes.length}</span><span class="csl">PPE</span></div>
-      <div><span class="csv2">${avg!==null?avg+'%':'—'}</span><span class="csl">Part. moyenne</span></div>
-      <div><span class="csv2">${med!==null?med+'%':'—'}</span><span class="csl">Part. médiane</span></div>
     </div>
     <div class="ccd">
       <div><div class="cdl"><i class="fas fa-flag"></i> Nationalité(s)</div>${nats.length?nats.join(' • '):NR}</div>
@@ -2532,7 +2619,7 @@ function renderPPE(){
   const na=[...new Set(ppes.map(r=>r.na).filter(Boolean))];
   const pr=[...new Set(ppes.map(r=>r.pr).filter(Boolean))];
   const pcts=ppes.map(r=>r.pa).filter(x=>x!==null);
-  const avg=pcts.length?(pcts.reduce((a,b)=>a+b,0)/pcts.length).toFixed(1):'—';
+  const avg=pcts.length?fmtDec(pcts.reduce((a,b)=>a+b,0)/pcts.length):'-';
   const co=[...new Set(ppes.map(r=>r.ds).filter(Boolean))];
   document.getElementById('ppe-kpis').innerHTML=[
     {ico:'fa-user-shield',val:ppes.length,lbl:'Total PPE',col:'var(--r)'},
@@ -2781,6 +2868,24 @@ if(document.readyState==='loading'){
 } else {
   initApp();
 }
+
+/* ── Filtre dropdown (navbar droite) ───────────────────────────────────────*/
+function toggleSbFold(e){
+  e&&e.stopPropagation();
+  const btn=document.getElementById('sb-drop-btn');
+  const panel=document.getElementById('sb');
+  const open=panel.classList.toggle('open');
+  btn.classList.toggle('open',open);
+}
+// Fermer en cliquant ailleurs
+document.addEventListener('click',e=>{
+  const dd=document.getElementById('sb-dropdown');
+  if(dd&&!dd.contains(e.target)){
+    document.getElementById('sb')&&document.getElementById('sb').classList.remove('open');
+    document.getElementById('sb-drop-btn')&&document.getElementById('sb-drop-btn').classList.remove('open');
+  }
+});
+
 </script>
 </body>
 </html>
