@@ -1432,14 +1432,14 @@ function reRenderEverything(){
 
 const COORDS={"Dakar":[14.693,-17.447],"Thiès":[14.788,-16.924],"Diourbel":[14.655,-16.232],"Fatick":[14.339,-16.411],"Kaolack":[14.152,-16.073],"Kédougou":[12.560,-12.186],"Mbour":[14.408,-16.965],"Tambacounda":[13.771,-13.667],"Ziguinchor":[12.565,-16.272],"Louga":[15.617,-16.224],"Saint-Louis":[16.028,-16.499],"Matam":[15.658,-13.263],"Kolda":[12.886,-14.944],"Sédhiou":[12.708,-15.557],"Kaffrine":[14.106,-15.551]};
 const CL={g:'#2799D7',gd:'#1C6FA5',y:'#5EB4DD',yd:'#1C6FA5',r:'#1C6FA5',b:'#2799D7'};
-const NR='<span class="nr">------</span>';
+const NR='<span class="nr">-</span>';
 const v=x=>(!x&&x!==0)?NR:esc(x);
 const vp=x=>(!x&&x!==0)?NR:esc(x)+'%';
 const fmt=n=>Number(n).toLocaleString('fr-FR');
 // Échappement HTML : neutralise tout balisage injecté via les données de la source
 const esc=s=>(s==null?'':String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Lien de recherche Google : nom cliquable -> ouvre Google dans un nouvel onglet
-const gl=t=>t?`<a class="gs" href="https://www.google.com/search?q=${encodeURIComponent(t)}" target="_blank" rel="noopener" title="Rechercher sur Google">${esc(t)}</a>`:'------';
+const gl=t=>t?`<a class="gs" href="https://www.google.com/search?q=${encodeURIComponent(t)}" target="_blank" rel="noopener" title="Rechercher sur Google">${esc(t)}</a>`:'-';
 // Petite icône Google (pour les cellules ayant déjà une action de clic)
 const gs=t=>t?` <a class="gs gsi" href="https://www.google.com/search?q=${encodeURIComponent(t)}" target="_blank" rel="noopener" title="Rechercher sur Google" onclick="event.stopPropagation()"><i class="fab fa-google"></i></a>`:'';
 let FD=[...DB],charts={},leafMap=null,nNodes=[],nLinks=[],nZoom=null,nSvg=null;
@@ -1654,7 +1654,7 @@ function resetF(){
 function stats(d){
   const co=[...new Set(d.map(r=>r.ds).filter(Boolean))];
   const pp=d.filter(r=>r.pp);
-  return{co,pp,na:[...new Set(d.map(r=>r.na).filter(Boolean))],pr:[...new Set(d.map(r=>r.pr).filter(Boolean))],avg:co.length?(d.length/co.length).toFixed(1):'------',total:d.length};
+  return{co,pp,na:[...new Set(d.map(r=>r.na).filter(Boolean))],pr:[...new Set(d.map(r=>r.pr).filter(Boolean))],avg:co.length?(d.length/co.length).toFixed(1):'-',total:d.length};
 }
 function compS(d){
   const m={};
@@ -1752,7 +1752,7 @@ function renderMulti(){
   const m={};
   FD.forEach(r=>{
     if(!r.pn)return;
-    if(!m[r.pn])m[r.pn]={pn:r.pn,na:r.na||'------',ents:new Set()};
+    if(!m[r.pn])m[r.pn]={pn:r.pn,na:r.na||'-',ents:new Set()};
     if(r.ds)m[r.pn].ents.add(r.ds);
   });
   const top=Object.values(m).map(x=>({pn:x.pn,na:x.na,n:x.ents.size})).filter(x=>x.n>=2).sort((a,b)=>b.n-a.n).slice(0,10);
@@ -1833,7 +1833,7 @@ function renderDB(){
   dbF.slice(s,e).forEach((r,i)=>{
     const tr=document.createElement('tr');
     tr.className='db-row';tr.title='Voir la fiche détaillée';
-    tr.innerHTML=`<td style="color:var(--gray);font-size:.74rem;text-align:right">${s+i+1}</td><td><strong>${esc(r.ds)||'------'}</strong></td><td>${r.pn?esc(r.pn):NR}</td><td>${r.rs?'<span class="bg">'+esc(r.rs)+'</span>':NR}</td><td>${v(r.na)}</td><td>${v(r.pr)}</td><td style="text-align:center">${vp(r.pa)}</td><td style="text-align:center">${vp(r.pv)}</td><td style="text-align:center">${r.pp?'<span class="br">PPE</span>':''}</td><td>${v(r.fp)}</td><td>${v(r.np)}</td><td>${r.gr?'<span class="bgr">'+esc(r.gr)+'</span>':NR}</td><td style="white-space:nowrap;font-size:.79rem">${v(r.da)}</td><td style="text-align:center">${v(r.an)}</td>`;
+    tr.innerHTML=`<td style="color:var(--gray);font-size:.74rem;text-align:right">${s+i+1}</td><td><strong>${esc(r.ds)||'-'}</strong></td><td>${r.pn?esc(r.pn):NR}</td><td>${r.rs?'<span class="bg">'+esc(r.rs)+'</span>':NR}</td><td>${v(r.na)}</td><td>${v(r.pr)}</td><td style="text-align:center">${vp(r.pa)}</td><td style="text-align:center">${vp(r.pv)}</td><td style="text-align:center">${r.pp?'<span class="br">PPE</span>':''}</td><td>${v(r.fp)}</td><td>${v(r.np)}</td><td>${r.gr?'<span class="bgr">'+esc(r.gr)+'</span>':NR}</td><td style="white-space:nowrap;font-size:.79rem">${v(r.da)}</td><td style="text-align:center">${v(r.an)}</td>`;
     tr.addEventListener('click',()=>showDetail(r));
     tb.appendChild(tr);
   });
@@ -1864,9 +1864,9 @@ function renderHomeNums(){
   const co=document.getElementById('home-co'); if(!co)return;
   const t=(typeof DB!=='undefined'&&DB)||[]; const ents=new Set(), bens=new Set(); let pp=0;
   t.forEach(r=>{ if(r.ds)ents.add(r.ds); if(r.pn)bens.add(r.pn); if(r.pp)pp++; });
-  co.textContent=ents.size||'------';
-  document.getElementById('home-be').textContent=bens.size||'------';
-  document.getElementById('home-pp').textContent=pp||'------';
+  co.textContent=ents.size||'-';
+  document.getElementById('home-be').textContent=bens.size||'-';
+  document.getElementById('home-pp').textContent=pp||'-';
 }
 /* ─── Recherche universelle d'accueil ─── */
 function toggleFilters(){
@@ -2070,11 +2070,11 @@ function exportFichePDF(r,coBe,beCo){
   doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(15);
   doc.text('OpenRBE — Fiche du bénéficiaire effectif',40,29);
   doc.setTextColor(20,20,20);doc.setFontSize(15);
-  doc.splitTextToSize(r.ds||'------',W-80).forEach(l=>{doc.text(l,40,y);y+=18;});
+  doc.splitTextToSize(r.ds||'-',W-80).forEach(l=>{doc.text(l,40,y);y+=18;});
   doc.setDrawColor(200,200,200);doc.line(40,y,W-40,y);y+=20;
-  const rows=[['Bénéficiaire effectif',r.pn],['Région',r.rs],['Greffe',r.gr],['Nationalité',r.na],['Pays de résidence',r.pr],['% Action directe',r.pa!=null?r.pa+'%':'------'],['% Voix directe',r.pv!=null?r.pv+'%':'------'],['PPE',r.pp?'Oui':'Non'],['Fonction PPE',r.fp],['Nom PPE lié',r.np],["Date d'acquisition",r.da],['Année',r.an]];
+  const rows=[['Bénéficiaire effectif',r.pn],['Région',r.rs],['Greffe',r.gr],['Nationalité',r.na],['Pays de résidence',r.pr],['% Action directe',r.pa!=null?r.pa+'%':'-'],['% Voix directe',r.pv!=null?r.pv+'%':'-'],['PPE',r.pp?'Oui':'Non'],['Fonction PPE',r.fp],['Nom PPE lié',r.np],["Date d'acquisition",r.da],['Année',r.an]];
   doc.setFontSize(10.5);
-  rows.forEach(([l,val])=>{doc.setFont('helvetica','bold');doc.setTextColor(90,90,90);doc.text(l,40,y);doc.setFont('helvetica','normal');doc.setTextColor(20,20,20);doc.splitTextToSize(String(val==null||val===''?'------':val),W-280).forEach((ln,k)=>{doc.text(ln,250,y+k*14);});y+=Math.max(18,doc.splitTextToSize(String(val==null?'------':val),W-280).length*14+4);});
+  rows.forEach(([l,val])=>{doc.setFont('helvetica','bold');doc.setTextColor(90,90,90);doc.text(l,40,y);doc.setFont('helvetica','normal');doc.setTextColor(20,20,20);doc.splitTextToSize(String(val==null||val===''?'-':val),W-280).forEach((ln,k)=>{doc.text(ln,250,y+k*14);});y+=Math.max(18,doc.splitTextToSize(String(val==null?'-':val),W-280).length*14+4);});
   const block=(title,arr)=>{if(!arr.length)return;y+=10;if(y>H-90){doc.addPage();y=60;}doc.setFont('helvetica','bold');doc.setTextColor(28,111,165);doc.setFontSize(11);doc.text(title,40,y);y+=15;doc.setFont('helvetica','normal');doc.setTextColor(40,40,40);doc.setFontSize(9.5);doc.splitTextToSize(arr.join('  •  '),W-80).forEach(l=>{if(y>H-60){doc.addPage();y=60;}doc.text(l,40,y);y+=13;});};
   block('Autres bénéficiaires de cette entreprise :',coBe);
   block('Autres entreprises de ce bénéficiaire :',beCo);
@@ -2553,7 +2553,7 @@ function renderPPE(){
   const na=[...new Set(ppes.map(r=>r.na).filter(Boolean))];
   const pr=[...new Set(ppes.map(r=>r.pr).filter(Boolean))];
   const pcts=ppes.map(r=>r.pa).filter(x=>x!==null);
-  const avg=pcts.length?(pcts.reduce((a,b)=>a+b,0)/pcts.length).toFixed(1):'------';
+  const avg=pcts.length?(pcts.reduce((a,b)=>a+b,0)/pcts.length).toFixed(1):'-';
   const co=[...new Set(ppes.map(r=>r.ds).filter(Boolean))];
   document.getElementById('ppe-kpis').innerHTML=[
     {ico:'fa-user-shield',val:ppes.length,lbl:'Total PPE',col:'var(--r)'},
