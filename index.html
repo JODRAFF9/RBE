@@ -642,6 +642,14 @@ body:not(.home) #page-home{display:none!important}
   .ucards{grid-template-columns:1fr}
 }
 /* ===== GUIDE NOVICE ===== */
+.guide-layout{display:flex;align-items:flex-start;gap:20px;margin-top:0}
+.guide-toc{position:sticky;top:72px;width:220px;flex-shrink:0;background:#fff;border:1px solid var(--brd);border-radius:10px;padding:14px 0;font-size:.82rem}
+.guide-toc-title{font-weight:700;color:var(--gd);padding:0 16px 10px;border-bottom:1px solid var(--brd);margin-bottom:6px;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+.guide-toc a{display:block;padding:6px 16px;color:var(--gray);text-decoration:none;border-left:3px solid transparent;transition:all .15s;line-height:1.3}
+.guide-toc a:hover{color:var(--gd);background:var(--yl);border-left-color:var(--y)}
+.guide-toc a.toc-active{color:var(--gd);font-weight:600;border-left-color:var(--gd);background:var(--yl)}
+.guide-card-body{flex:1;min-width:0}
+@media(max-width:768px){.guide-layout{flex-direction:column}.guide-toc{position:static;width:100%;border-radius:8px}}
 .guide-hero{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .guide-hero-txt{flex:1;min-width:240px}
 .guide-hero-sub{margin:6px 0 0;color:var(--gray);font-size:.9rem;line-height:1.55}
@@ -1057,7 +1065,10 @@ body:not(.home) #page-home{display:none!important}
     </div>
     <button class="nb gn guide-dl" onclick="downloadGuidePDF()"><i class="fas fa-file-pdf"></i> Télécharger en PDF</button>
   </div>
-  <div class="card"><div id="guide-body" class="guide-body"></div></div>
+  <div class="guide-layout">
+    <nav class="guide-toc" id="guide-toc"></nav>
+    <div class="card guide-card-body"><div id="guide-body" class="guide-body"></div></div>
+  </div>
 </div>
 
 </div></div>
@@ -2187,8 +2198,41 @@ function renderGuide(){
     else if(t==='table'){ h+='<table class="guide-tbl"><thead><tr>'+b[1].map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+b[2].map(r=>'<tr>'+r.map(c=>'<td>'+mdBold(c)+'</td>').join('')+'</tr>').join('')+'</tbody></table>'; }
   });
   closeUl();
+  // Add IDs to h1 headings for anchor links
+  let idx=0;
+  h=h.replace(/<h3 class="guide-h1">/g,()=>'<h3 class="guide-h1" id="g-s'+(idx++)+'">');
   host.innerHTML=h;
+  // Build TOC
+  const toc=document.getElementById('guide-toc');
+  if(toc){
+    let th='<div class="guide-toc-title">Sommaire</div>';
+    GUIDE.filter(b=>b[0]==='h1').forEach((b,i)=>{
+      th+='<a href="#g-s'+i+'" onclick="tocClick(event,\'g-s'+i+'\')">'+esc(b[1])+'</a>';
+    });
+    toc.innerHTML=th;
+  }
+  // Scroll spy
+  const card=document.getElementById('page-guide');
+  if(card) card.addEventListener('scroll',updateTocActive,{passive:true});
   guideRendered=true;
+}
+
+function tocClick(e,id){
+  e.preventDefault();
+  const el=document.getElementById(id);
+  const pg=document.getElementById('page-guide');
+  if(el&&pg) pg.scrollTo({top:el.offsetTop-20,behavior:'smooth'});
+}
+
+function updateTocActive(){
+  const pg=document.getElementById('page-guide'); if(!pg)return;
+  const scroll=pg.scrollTop;
+  const headings=pg.querySelectorAll('.guide-h1');
+  let active=null;
+  headings.forEach(h=>{if(h.offsetTop-40<=scroll)active=h.id;});
+  pg.querySelectorAll('.guide-toc a').forEach(a=>{
+    a.classList.toggle('toc-active',a.getAttribute('href')==='#'+active);
+  });
 }
 
 function downloadGuidePDF(){
