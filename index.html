@@ -642,6 +642,12 @@ body:not(.home) #page-home{display:none!important}
 .sb-drag-handle{cursor:grab;user-select:none}
 .sb-drag-handle:active{cursor:grabbing}
 #sb.is-dragging{opacity:.88;box-shadow:0 8px 32px rgba(0,0,0,.18);transition:none}
+/* ── Sidebar pliable ── */
+.sb-fold-btn{margin-left:auto;background:none;border:none;color:var(--g);cursor:pointer;font-size:.8rem;padding:2px 4px;border-radius:3px;transition:transform .25s,color .15s;flex-shrink:0}
+.sb-fold-btn:hover{color:var(--gd)}
+#sb.sb-folded .sb-fold-btn{transform:rotate(-90deg)}
+#sb.sb-folded .sb-body{display:none}
+#sb.sb-folded{padding-bottom:10px;overflow:hidden}
 </style>
 </head>
 <body>
@@ -870,23 +876,28 @@ body:not(.home) #page-home{display:none!important}
 <div id="app">
 <button class="sb-toggle" onclick="toggleFilters()" title="Afficher / masquer les filtres" aria-label="Filtres"><i class="fas fa-filter"></i></button>
 <div id="sb">
-  <div class="sb-ttl sb-drag-handle" title="Déplacer le panneau"><i class="fas fa-grip-vertical" style="opacity:.45;margin-right:4px"></i><i class="fas fa-filter"></i> Filtres globaux</div>
+  <div class="sb-ttl sb-drag-handle" title="Déplacer le panneau">
+    <i class="fas fa-grip-vertical" style="opacity:.45;margin-right:4px"></i>
+    <i class="fas fa-filter"></i> Filtres globaux
+    <button class="sb-fold-btn" onclick="toggleSbFold(event)" title="Replier / déplier"><i class="fas fa-chevron-down"></i></button>
+  </div>
+  <div class="sb-body">
+    <!-- Réinitialiser EN HAUT -->
+    <button class="btn-rst" onclick="resetF()"><i class="fas fa-rotate-left"></i> Réinitialiser tous les filtres</button>
+    <div id="active-filters-bar" class="active-filters-bar" style="margin-top:6px"></div>
 
-  <!-- Réinitialiser EN HAUT -->
-  <button class="btn-rst" onclick="resetF()"><i class="fas fa-rotate-left"></i> Réinitialiser tous les filtres</button>
-  <div id="active-filters-bar" class="active-filters-bar" style="margin-top:6px"></div>
-
-  <div class="fb"><label class="fl">Région</label>
-    <select id="fr"><option value="">Toutes les régions</option></select>
-  </div>
-  <div class="fb"><label class="fl">Nationalité</label>
-    <select id="fn"><option value="">Toutes les nationalités</option></select>
-  </div>
-  <div class="fb"><label class="fl">Pays de résidence</label>
-    <select id="fp"><option value="">Tous les pays</option></select>
-  </div>
-  <div class="fb"><label class="fl">Statut PPE</label>
-    <div class="sw-row">PPE uniquement <label class="tog"><input type="checkbox" id="fppe"><span class="ts"></span></label></div>
+    <div class="fb"><label class="fl">Région</label>
+      <select id="fr"><option value="">Toutes les régions</option></select>
+    </div>
+    <div class="fb"><label class="fl">Nationalité</label>
+      <select id="fn"><option value="">Toutes les nationalités</option></select>
+    </div>
+    <div class="fb"><label class="fl">Pays de résidence</label>
+      <select id="fp"><option value="">Tous les pays</option></select>
+    </div>
+    <div class="fb"><label class="fl">Statut PPE</label>
+      <div class="sw-row">PPE uniquement <label class="tog"><input type="checkbox" id="fppe"><span class="ts"></span></label></div>
+    </div>
   </div>
 </div>
 
@@ -2810,6 +2821,12 @@ if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded', initApp);
 } else {
   initApp();
+}
+
+/* ── Sidebar pliable ───────────────────────────────────────────────────────*/
+function toggleSbFold(e){
+  e.stopPropagation();  // ne pas déclencher le drag
+  document.getElementById('sb').classList.toggle('sb-folded');
 }
 
 /* ── Sidebar draggable ─────────────────────────────────────────────────────*/
