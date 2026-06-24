@@ -69,16 +69,22 @@ body.nav-light .nav-bar li a.active{color:var(--gd);border-bottom-color:var(--g)
 /* ── LAYOUT ── */
 #app{display:flex;min-height:calc(100vh - 108px);max-width:1900px;margin:0 auto}
 
-/* ── SIDEBAR ── */
-#sb{width:280px;flex-shrink:0;background:transparent;border:1px solid rgba(221,227,234,.45);border-radius:0 0 10px 10px;border-top:none;padding:14px 16px;position:sticky;top:0;align-self:flex-start;max-height:100vh;overflow-y:auto;box-shadow:none;z-index:90;transition:transform .25s ease,opacity .2s}
-#sb::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,var(--g) 0%,var(--gd) 100%);border-radius:10px 0 0 10px}
-#sb.collapsed{transform:translateX(calc(-100% - 20px));opacity:0}
-.sb-toggle{position:fixed;top:128px;left:16px;width:42px;height:42px;background:var(--g);color:#fff;border:none;border-radius:50%;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.18);z-index:91;display:none;align-items:center;justify-content:center;font-size:1rem;transition:.2s}
-.sb-toggle:hover{background:var(--gd);transform:scale(1.05)}
-body.show-toggle .sb-toggle{display:flex}
-body.no-filters #sb,body.no-filters .sb-toggle,body.home #sb,body.home .sb-toggle{display:none!important}
+/* ── SIDEBAR dropdown (navbar droite) ── */
+.nav-bar .nav-inner{display:flex;align-items:stretch;padding:0 24px;max-width:1900px;margin:0 auto;overflow-x:auto}
+.nav-bar .nav-inner ul{display:flex;list-style:none;flex:1}
+.sb-dropdown{position:relative;display:none;align-items:center;margin-left:auto;flex-shrink:0}
+body:not(.home):not(.no-filters) .sb-dropdown{display:flex}
+.sb-drop-btn{display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.78);font-size:.83rem;font-weight:600;padding:10px 15px;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:var(--font);transition:.2s;white-space:nowrap}
+.sb-drop-btn:hover,.sb-drop-btn.open{color:#fff;border-bottom-color:var(--y)}
+body.nav-light .sb-drop-btn{color:var(--gray)}
+body.nav-light .sb-drop-btn:hover,body.nav-light .sb-drop-btn.open{color:var(--gd);border-bottom-color:var(--g)}
+.sb-drop-arrow{font-size:.7rem;transition:transform .25s}
+.sb-drop-btn.open .sb-drop-arrow{transform:rotate(180deg)}
+.sb-panel{display:none;position:absolute;top:100%;right:0;width:280px;background:#fff;border:1px solid var(--brd);border-top:none;border-radius:0 0 8px 8px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:500;padding:14px 16px;max-height:70vh;overflow-y:auto}
+.sb-panel.open{display:block;animation:fu .2s ease}
+body.no-filters .sb-dropdown,body.home .sb-dropdown{display:none!important}
+.sb-toggle{display:none}
 #ct{width:100%}
-body:not(.home):not(.no-filters) #ct{padding-left:20px}
 .sb-ttl{font-size:.77rem;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;padding-bottom:7px;border-bottom:2px solid var(--gl);display:flex;align-items:center;gap:6px}
 .btn-rst{width:100%;margin-bottom:12px;padding:7px;background:var(--rl);color:var(--r);border:1px solid var(--r);border-radius:4px;font-family:var(--font);font-size:.79rem;font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:5px}
 .btn-rst:hover{background:var(--r);color:#fff}
@@ -639,12 +645,6 @@ body:not(.home) #page-home{display:none!important}
 .guide-tbl tr:nth-child(even) td{background:var(--bg)}
 .guide-body strong{color:var(--gd);font-weight:600}
 /* ── Sidebar draggable ── */
-/* ── Sidebar pliable ── */
-.sb-fold-btn{margin-left:auto;background:none;border:none;color:var(--g);cursor:pointer;font-size:.8rem;padding:2px 4px;border-radius:3px;transition:transform .25s,color .15s;flex-shrink:0}
-.sb-fold-btn:hover{color:var(--gd)}
-#sb.sb-folded .sb-fold-btn{transform:rotate(-90deg)}
-#sb.sb-folded .sb-body{display:none}
-#sb.sb-folded{padding-bottom:10px;overflow:hidden}
 </style>
 </head>
 <body>
@@ -667,15 +667,42 @@ body:not(.home) #page-home{display:none!important}
       <div class="badge"><i class="fas fa-shield-halved"></i> Données officielles ITIE</div>
     </div>
   </div>
-  <nav class="nav-bar"><ul>
-    <li><a href="#" class="active" data-page="home"><i class="fas fa-house"></i> Accueil</a></li>
-    <li><a href="#" data-page="dashboard"><i class="fas fa-gauge-high"></i> Tableau de bord</a></li>
-    <li><a href="#" data-page="database"><i class="fas fa-database"></i> Base complète</a></li>
-    <li><a href="#" data-page="ppe"><i class="fas fa-user-shield"></i> Analyse PPE</a></li>
-    <li><a href="#" data-page="network"><i class="fas fa-diagram-project"></i> Réseaux</a></li>
-    <li><a href="#" data-page="map"><i class="fas fa-map-location-dot"></i> Cartographie</a></li>
-    <li><a href="#" data-page="guide"><i class="fas fa-book-open"></i> Guide</a></li>
-  </ul></nav>
+  <nav class="nav-bar">
+    <div class="nav-inner">
+      <ul>
+        <li><a href="#" class="active" data-page="home"><i class="fas fa-house"></i> Accueil</a></li>
+        <li><a href="#" data-page="dashboard"><i class="fas fa-gauge-high"></i> Tableau de bord</a></li>
+        <li><a href="#" data-page="database"><i class="fas fa-database"></i> Base complète</a></li>
+        <li><a href="#" data-page="ppe"><i class="fas fa-user-shield"></i> Analyse PPE</a></li>
+        <li><a href="#" data-page="network"><i class="fas fa-diagram-project"></i> Réseaux</a></li>
+        <li><a href="#" data-page="map"><i class="fas fa-map-location-dot"></i> Cartographie</a></li>
+        <li><a href="#" data-page="guide"><i class="fas fa-book-open"></i> Guide</a></li>
+      </ul>
+      <div id="sb-dropdown" class="sb-dropdown">
+        <button class="sb-drop-btn" id="sb-drop-btn" onclick="toggleSbFold(event)" title="Filtres globaux">
+          <i class="fas fa-filter"></i> <span class="sb-drop-lbl">Filtres</span> <i class="fas fa-chevron-down sb-drop-arrow"></i>
+        </button>
+        <div id="sb" class="sb-panel">
+          <div class="sb-body">
+            <button class="btn-rst" onclick="resetF()"><i class="fas fa-rotate-left"></i> Réinitialiser tous les filtres</button>
+            <div id="active-filters-bar" class="active-filters-bar" style="margin-top:6px"></div>
+            <div class="fb"><label class="fl">Région</label>
+              <select id="fr"><option value="">Toutes les régions</option></select>
+            </div>
+            <div class="fb"><label class="fl">Nationalité</label>
+              <select id="fn"><option value="">Toutes les nationalités</option></select>
+            </div>
+            <div class="fb"><label class="fl">Pays de résidence</label>
+              <select id="fp"><option value="">Tous les pays</option></select>
+            </div>
+            <div class="fb"><label class="fl">Statut PPE</label>
+              <div class="sw-row">PPE uniquement <label class="tog"><input type="checkbox" id="fppe"><span class="ts"></span></label></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
 </div>
 
 <!-- ══ PAGE HOME (accueil institutionnelle) ══ -->
@@ -869,34 +896,8 @@ body:not(.home) #page-home{display:none!important}
   </div>
 </section>
 
-<!-- APP (filtres + contenu interactif) -->
+<!-- APP (contenu interactif) -->
 <div id="app">
-<button class="sb-toggle" onclick="toggleFilters()" title="Afficher / masquer les filtres" aria-label="Filtres"><i class="fas fa-filter"></i></button>
-<div id="sb">
-  <div class="sb-ttl">
-    <i class="fas fa-filter"></i> Filtres globaux
-    <button class="sb-fold-btn" onclick="toggleSbFold(event)" title="Replier / déplier"><i class="fas fa-chevron-down"></i></button>
-  </div>
-  <div class="sb-body">
-    <!-- Réinitialiser EN HAUT -->
-    <button class="btn-rst" onclick="resetF()"><i class="fas fa-rotate-left"></i> Réinitialiser tous les filtres</button>
-    <div id="active-filters-bar" class="active-filters-bar" style="margin-top:6px"></div>
-
-    <div class="fb"><label class="fl">Région</label>
-      <select id="fr"><option value="">Toutes les régions</option></select>
-    </div>
-    <div class="fb"><label class="fl">Nationalité</label>
-      <select id="fn"><option value="">Toutes les nationalités</option></select>
-    </div>
-    <div class="fb"><label class="fl">Pays de résidence</label>
-      <select id="fp"><option value="">Tous les pays</option></select>
-    </div>
-    <div class="fb"><label class="fl">Statut PPE</label>
-      <div class="sw-row">PPE uniquement <label class="tog"><input type="checkbox" id="fppe"><span class="ts"></span></label></div>
-    </div>
-  </div>
-</div>
-
 <div id="ct">
 
 <div id="fresh-banner" role="status"></div>
@@ -2819,11 +2820,22 @@ if(document.readyState==='loading'){
   initApp();
 }
 
-/* ── Sidebar pliable ───────────────────────────────────────────────────────*/
+/* ── Filtre dropdown (navbar droite) ───────────────────────────────────────*/
 function toggleSbFold(e){
-  e.stopPropagation();  // ne pas déclencher le drag
-  document.getElementById('sb').classList.toggle('sb-folded');
+  e&&e.stopPropagation();
+  const btn=document.getElementById('sb-drop-btn');
+  const panel=document.getElementById('sb');
+  const open=panel.classList.toggle('open');
+  btn.classList.toggle('open',open);
 }
+// Fermer en cliquant ailleurs
+document.addEventListener('click',e=>{
+  const dd=document.getElementById('sb-dropdown');
+  if(dd&&!dd.contains(e.target)){
+    document.getElementById('sb')&&document.getElementById('sb').classList.remove('open');
+    document.getElementById('sb-drop-btn')&&document.getElementById('sb-drop-btn').classList.remove('open');
+  }
+});
 
 </script>
 </body>
