@@ -1434,8 +1434,9 @@ const COORDS={"Dakar":[14.693,-17.447],"Thiès":[14.788,-16.924],"Diourbel":[14.
 const CL={g:'#2799D7',gd:'#1C6FA5',y:'#5EB4DD',yd:'#1C6FA5',r:'#1C6FA5',b:'#2799D7'};
 const NR='<span class="nr">-</span>';
 const v=x=>(!x&&x!==0)?NR:esc(x);
-const vp=x=>(!x&&x!==0)?NR:esc(x)+'%';
+const vp=x=>(!x&&x!==0)?NR:esc(String(x).replace('.',','))+'%';
 const fmt=n=>Number(n).toLocaleString('fr-FR');
+const fmtDec=x=>x==null?'-':String(Number(x).toFixed(1)).replace('.',',');
 // Échappement HTML : neutralise tout balisage injecté via les données de la source
 const esc=s=>(s==null?'':String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Lien de recherche Google : nom cliquable -> ouvre Google dans un nouvel onglet
@@ -2504,8 +2505,8 @@ function renderBeneficiaire(nom){
   const ppes    = rows.filter(r=>r.pp);
   const pcts    = rows.map(r=>r.pa).filter(x=>x!==null);
   const pcts_v  = rows.map(r=>r.pv).filter(x=>x!==null);
-  const avg     = pcts.length  ?(pcts.reduce((a,b)=>a+b,0)/pcts.length).toFixed(1):null;
-  const avg_v   = pcts_v.length?(pcts_v.reduce((a,b)=>a+b,0)/pcts_v.length).toFixed(1):null;
+  const avg     = pcts.length  ?fmtDec(pcts.reduce((a,b)=>a+b,0)/pcts.length):null;
+  const avg_v   = pcts_v.length?fmtDec(pcts_v.reduce((a,b)=>a+b,0)/pcts_v.length):null;
   const dates   = rows.map(r=>r.da).filter(Boolean).sort();
   const annees  = [...new Set(rows.map(r=>r.an).filter(Boolean))].sort();
   const sfx     = nom.replace(/[^a-zA-Z0-9]/g,'_').substring(0,30);
@@ -2565,7 +2566,7 @@ function renderCC(nm){
   const pays=[...new Set(rows.map(r=>r.pr).filter(Boolean))].sort();
   const ppes=rows.filter(r=>r.pp);
   const pcts=rows.map(r=>r.pa).filter(x=>x!==null);
-  const avg=pcts.length?(pcts.reduce((a,b)=>a+b,0)/pcts.length).toFixed(1):null;
+  const avg=pcts.length?fmtDec(pcts.reduce((a,b)=>a+b,0)/pcts.length):null;
   const med=pcts.length?pcts.sort((a,b)=>a-b)[Math.floor(pcts.length/2)]:null;
   const dates=rows.map(r=>r.da).filter(Boolean).sort();
   const annees=[...new Set(rows.map(r=>r.an).filter(Boolean))].sort();
@@ -2621,7 +2622,7 @@ function renderPPE(){
   const na=[...new Set(ppes.map(r=>r.na).filter(Boolean))];
   const pr=[...new Set(ppes.map(r=>r.pr).filter(Boolean))];
   const pcts=ppes.map(r=>r.pa).filter(x=>x!==null);
-  const avg=pcts.length?(pcts.reduce((a,b)=>a+b,0)/pcts.length).toFixed(1):'-';
+  const avg=pcts.length?fmtDec(pcts.reduce((a,b)=>a+b,0)/pcts.length):'-';
   const co=[...new Set(ppes.map(r=>r.ds).filter(Boolean))];
   document.getElementById('ppe-kpis').innerHTML=[
     {ico:'fa-user-shield',val:ppes.length,lbl:'Total PPE',col:'var(--r)'},
