@@ -188,7 +188,6 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{ou
   .kr{grid-template-columns:1fr 1fr;gap:8px}
   .nav-bar ul{padding:0 8px}
   .nav-bar li a{padding:9px 11px;font-size:.8rem}
-  .sb-panel{position:fixed;top:auto;bottom:0;left:0;right:0;width:100%;max-height:60vh;border-radius:12px 12px 0 0;border:none;border-top:1px solid rgba(255,255,255,.15)}
   #btt{bottom:16px;right:16px;width:42px;height:42px}
 }
 .cw{position:relative;height:285px}.cw canvas{max-height:285px}
@@ -2881,15 +2880,35 @@ function toggleSbFold(e){
   e&&e.stopPropagation();
   const btn=document.getElementById('sb-drop-btn');
   const panel=document.getElementById('sb');
+  const isMobile=window.innerWidth<=820;
+  if(isMobile){
+    if(panel.classList.contains('open')){
+      panel.classList.remove('open');
+      btn.classList.remove('open');
+      panel.style.cssText='';
+      document.getElementById('sb-dropdown').appendChild(panel);
+    } else {
+      document.body.appendChild(panel);
+      panel.style.cssText='display:block;position:fixed;bottom:0;left:0;right:0;width:100%;max-height:60vh;border-radius:12px 12px 0 0;border:none;border-top:1px solid rgba(255,255,255,.15);z-index:9999;top:auto';
+      panel.classList.add('open');
+      btn.classList.add('open');
+    }
+    return;
+  }
   const open=panel.classList.toggle('open');
   btn.classList.toggle('open',open);
 }
 // Fermer en cliquant ailleurs
 document.addEventListener('click',e=>{
   const dd=document.getElementById('sb-dropdown');
-  if(dd&&!dd.contains(e.target)){
-    document.getElementById('sb')&&document.getElementById('sb').classList.remove('open');
-    document.getElementById('sb-drop-btn')&&document.getElementById('sb-drop-btn').classList.remove('open');
+  const panel=document.getElementById('sb');
+  const btn=document.getElementById('sb-drop-btn');
+  if(!panel||!btn)return;
+  const clickedInside=dd&&dd.contains(e.target)||panel.contains(e.target);
+  if(!clickedInside&&panel.classList.contains('open')){
+    panel.classList.remove('open');
+    btn.classList.remove('open');
+    if(window.innerWidth<=820){panel.style.cssText='';if(!dd.contains(panel))dd.appendChild(panel);}
   }
 });
 
