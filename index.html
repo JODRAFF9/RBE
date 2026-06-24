@@ -70,8 +70,8 @@ body.nav-light .nav-bar li a.active{color:var(--gd);border-bottom-color:var(--g)
 #app{display:flex;min-height:calc(100vh - 108px);max-width:1900px;margin:0 auto}
 
 /* ── SIDEBAR dropdown (navbar droite) ── */
-.nav-bar .nav-inner{display:flex;align-items:stretch;padding:0 24px;max-width:1900px;margin:0 auto;overflow-x:auto}
-.nav-bar .nav-inner ul{display:flex;list-style:none;flex:1}
+.nav-bar .nav-inner{display:flex;align-items:stretch;padding:0 24px;max-width:1900px;margin:0 auto;overflow:visible}
+.nav-bar .nav-inner ul{display:flex;list-style:none;flex:1;overflow-x:auto}
 .sb-dropdown{position:relative;display:none;align-items:center;margin-left:auto;flex-shrink:0}
 body:not(.home):not(.no-filters) .sb-dropdown{display:flex}
 .sb-drop-btn{display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.78);font-size:.83rem;font-weight:600;padding:10px 15px;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:var(--font);transition:.2s;white-space:nowrap}
