@@ -147,6 +147,9 @@ input[type=range]{width:100%;accent-color:var(--g)}
 /* ── Bouton « retour en haut » ── */
 #btt{position:fixed;bottom:22px;right:22px;width:46px;height:46px;border-radius:50%;background:var(--g);color:#fff;border:none;box-shadow:var(--sh-l);font-size:1.05rem;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(12px);transition:.25s;z-index:1500}
 #mob-filter-btn{display:none}
+#mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:8999}
+#mob-overlay.show{display:block}
+#mob-filter-close{display:none}
 #btt.show{opacity:1;pointer-events:auto;transform:translateY(0)}
 #btt:hover{background:var(--gd);transform:translateY(-2px)}
 /* ── Accessibilité : focus visible ── */
@@ -1081,6 +1084,7 @@ body:not(.home) #page-home{display:none!important}
 
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut" aria-label="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 <button id="mob-filter-btn" onclick="toggleSbFold(event)"><i class="fas fa-filter"></i> Filtres</button>
+<div id="mob-overlay" onclick="closeMobFilter()"></div>
 
 <!-- ══ MODAL FICHE DÉTAILLÉE ══ -->
 <div class="modal-overlay hidden" id="modal-detail" onclick="closeOnBg(event,'modal-detail')">
@@ -2885,22 +2889,41 @@ if(document.readyState==='loading'){
 }
 
 /* ── Filtre dropdown (navbar droite) ───────────────────────────────────────*/
+function closeMobFilter(){
+  const panel=document.getElementById('sb');
+  const btn=document.getElementById('sb-drop-btn');
+  const ov=document.getElementById('mob-overlay');
+  panel.classList.remove('open');
+  if(btn)btn.classList.remove('open');
+  panel.style.cssText='';
+  const dd=document.getElementById('sb-dropdown');
+  if(!dd.contains(panel))dd.appendChild(panel);
+  if(ov)ov.classList.remove('show');
+}
 function toggleSbFold(e){
   e&&e.stopPropagation();
   const btn=document.getElementById('sb-drop-btn');
   const panel=document.getElementById('sb');
+  const ov=document.getElementById('mob-overlay');
   const isMobile=window.innerWidth<=820;
   if(isMobile){
     if(panel.classList.contains('open')){
-      panel.classList.remove('open');
-      btn.classList.remove('open');
-      panel.style.cssText='';
-      document.getElementById('sb-dropdown').appendChild(panel);
+      closeMobFilter();
     } else {
       document.body.appendChild(panel);
-      panel.style.cssText='display:block;position:fixed;bottom:0;left:0;right:0;width:100%;max-height:60vh;border-radius:12px 12px 0 0;border:none;border-top:1px solid rgba(255,255,255,.15);z-index:9999;top:auto';
+      panel.style.cssText='display:block;position:fixed;bottom:0;left:0;right:0;width:100%;max-height:50vh;border-radius:16px 16px 0 0;border:none;border-top:2px solid rgba(255,255,255,.2);z-index:9999;top:auto;overflow-y:auto;padding:16px';
+      // Ajouter bouton fermer en haut du panel si pas encore présent
+      if(!panel.querySelector('.mob-close-btn')){
+        const cb=document.createElement('button');
+        cb.className='mob-close-btn';
+        cb.innerHTML='<i class="fas fa-times"></i> Fermer';
+        cb.style.cssText='display:flex;align-items:center;gap:8px;margin-left:auto;margin-bottom:12px;background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:var(--font)';
+        cb.onclick=closeMobFilter;
+        panel.querySelector('.sb-body').prepend(cb);
+      }
       panel.classList.add('open');
-      btn.classList.add('open');
+      if(btn)btn.classList.add('open');
+      if(ov)ov.classList.add('show');
     }
     return;
   }
