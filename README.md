@@ -1,4 +1,4 @@
-# OpenRBE — Registre des Bénéficiaires Effectifs
+# OpenRBE - Registre des Bénéficiaires Effectifs
 
 **Plateforme nationale de consultation du secteur extractif sénégalais**  
 Initiative portée par la **CN-ITIE Sénégal** dans le cadre de la Norme ITIE 2023 (Exigence 2.5).
@@ -9,7 +9,7 @@ Initiative portée par la **CN-ITIE Sénégal** dans le cadre de la Norme ITIE 2
 
 OpenRBE rend public et lisible le registre national des bénéficiaires effectifs des entreprises pétrolières, gazières et minières opérant au Sénégal.
 
-La plateforme est accessible à tous — citoyens, journalistes, agents publics, partenaires — sans compte ni installation.
+La plateforme est accessible à tous - citoyens, journalistes, agents publics, partenaires - sans compte ni installation.
 
 ---
 
@@ -29,13 +29,13 @@ La plateforme est accessible à tous — citoyens, journalistes, agents publics,
 
 ## Architecture
 
-Application **mono-fichier** (`index.html`) — aucun serveur, aucun build requis.
+Application **mono-fichier** (`index.html`) - aucun serveur, aucun build requis.
 
 ```
 index.html
-├── CSS inline        — design system, responsive, composants
-├── HTML              — structure des pages (SPA)
-└── JavaScript inline — logique, chargement des données, graphiques
+├── CSS inline        - design system, responsive, composants
+├── HTML              - structure des pages (SPA)
+└── JavaScript inline - logique, chargement des données, graphiques
 ```
 
 ### Bibliothèques externes (CDN)
@@ -88,17 +88,17 @@ Le site est déployé automatiquement via **GitHub Actions** à chaque push sur 
 open index.html   # ou double-clic sur le fichier
 ```
 
-Aucune dépendance à installer — tout est chargé via CDN.
+Aucune dépendance à installer - tout est chargé via CDN.
 
 ---
 
 ## Cadre légal
 
-- **Décret n° 2021-1443** — Création et organisation du RBE au Sénégal
-- **Décret n° 2021-1803** — Modalités de tenue du registre
-- **Arrêté n° 24577 du 2 septembre 2022** — Volet fiscal (DGID)
-- **Loi n° 2021-29 du 5 juillet 2021** — Renforcement CGI articles 633 et 667
-- **Norme ITIE 2023** — Exigence 2.5 : divulgation des bénéficiaires effectifs
+- **Décret n° 2021-1443** - Création et organisation du RBE au Sénégal
+- **Décret n° 2021-1803** - Modalités de tenue du registre
+- **Arrêté n° 24577 du 2 septembre 2022** - Volet fiscal (DGID)
+- **Loi n° 2021-29 du 5 juillet 2021** - Renforcement CGI articles 633 et 667
+- **Norme ITIE 2023** - Exigence 2.5 : divulgation des bénéficiaires effectifs
 
 ---
 
