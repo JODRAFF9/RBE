@@ -655,6 +655,9 @@ body:not(.home) #page-home{display:none!important}
 .guide-ul li{position:relative;padding:3px 0 3px 20px}
 .guide-ul li:before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;border-radius:2px;background:var(--yd)}
 .guide-note{display:flex;gap:10px;align-items:flex-start;background:var(--yl);border-left:4px solid var(--y);border-radius:6px;padding:11px 14px;margin:10px 0 14px}
+.guide-img-wrap{margin:16px 0 20px;text-align:center}
+.guide-img{width:100%;max-width:900px;border:1px solid var(--brd);border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.1);display:block;margin:0 auto}
+.guide-img-cap{display:block;font-size:.75rem;color:var(--gray);margin-top:7px;font-style:italic}
 .guide-note i{color:var(--yd);margin-top:2px;flex-shrink:0}
 .guide-tbl{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:.88rem}
 .guide-tbl th{background:var(--gd);color:#fff;text-align:left;padding:8px 11px;font-weight:600}
@@ -2084,6 +2087,7 @@ const GUIDE=[
  ["li","**PPE** : Personne Politiquement Exposée — occupe ou a occupé une fonction publique importante."],
  ["li","**Greffe** : tribunal de commerce où l'entreprise est immatriculée (RCCM)."],
 
+ ["img","docs/screenshots/accueil.png","Page d'accueil - OpenRBE"],
  ["h1","2. Comment naviguer dans le site"],
  ["p","La barre en haut de l'écran contient les onglets. **Cliquez un onglet** pour changer de section. Le filtre se trouve en haut à droite de la barre — cliquez l'icône entonnoir pour l'ouvrir. Le **logo CN-ITIE** (en haut à gauche) ouvre le site officiel de l'ITIE Sénégal dans un nouvel onglet."],
  ["li","**Accueil** : recherche rapide et textes juridiques."],
@@ -2104,12 +2108,14 @@ const GUIDE=[
  ["li","**Pour tout effacer** : cliquez « Réinitialiser les filtres » dans le panneau."],
  ["note","Les accents et majuscules sont ignorés partout. Taper « dakar » trouve « Dakar » et « DAKAR »."],
 
+ ["img","docs/screenshots/recherche.png","Barre de recherche avec résultats en direct"],
  ["h1","4. Faire une recherche rapide (page Accueil)"],
  ["p","Sur la page d'accueil, une barre de recherche vous permet de trouver n'importe quoi en quelques lettres."],
  ["li","**Tapez au moins 2 lettres** : les résultats apparaissent en temps réel, classés par entreprises et bénéficiaires."],
  ["li","**Cliquez un résultat** dans la liste pour ouvrir sa fiche détaillée."],
  ["li","**Appuyez sur Entrée** pour basculer vers la Base complète avec votre terme appliqué comme filtre de recherche."],
 
+ ["img","docs/screenshots/dashboard.png","Tableau de bord - indicateurs et graphiques"],
  ["h1","5. Consulter la Base complète"],
  ["p","L'onglet **Base complète** affiche toutes les déclarations. Une ligne = un lien entre une entreprise et l'un de ses bénéficiaires."],
  ["li","**Pour chercher** : tapez dans la barre de recherche en haut du tableau. Le filtrage se fait instantanément."],
@@ -2119,6 +2125,7 @@ const GUIDE=[
  ["li","**Pour exporter** : cliquez « Exporter avec sélection », choisissez le format (CSV ou Excel) et les colonnes souhaitées."],
  ["note","L'export respecte les filtres actifs. Si vous avez filtré sur Dakar, seules les lignes de Dakar sont exportées."],
 
+ ["img","docs/screenshots/database.png","Base complète des bénéficiaires effectifs"],
  ["h1","6. Ouvrir une fiche détaillée"],
  ["p","**Cliquez une ligne** dans la Base complète, le tableau PPE ou un résultat de recherche. La fiche affiche :"],
  ["li","Tous les champs de la déclaration : entreprise, bénéficiaire, région, greffe, nationalité, pays de résidence, % action, % voix, statut PPE, date d'acquisition."],
@@ -2126,12 +2133,14 @@ const GUIDE=[
  ["li","**Les autres entreprises du même bénéficiaire** : cliquez une entreprise pour voir sa fiche."],
  ["li","Bouton **Télécharger en PDF** pour enregistrer la fiche."],
 
+ ["img","docs/screenshots/ppe.png","Analyse PPE - Personnes Politiquement Exposées"],
  ["h1","7. Analyser les PPE"],
  ["p","Allez dans l'onglet **Analyse PPE**. Vous y trouvez uniquement les bénéficiaires déclarés comme Personnes Politiquement Exposées."],
  ["li","Lisez les indicateurs en haut (nombre de PPE, entreprises concernées, nationalités)."],
  ["li","Consultez les graphiques de répartition."],
  ["li","**Cliquez une ligne du tableau** pour ouvrir la fiche détaillée de la PPE."],
 
+ ["img","docs/screenshots/reseau.png","Réseaux de propriété effective"],
  ["h1","8. Explorer les réseaux de propriété"],
  ["p","L'onglet **Réseaux** affiche un graphe interactif des liens entre entreprises et bénéficiaires."],
  ["li","**Se déplacer dans le graphe** : cliquez-glissez dans une zone vide."],
@@ -2174,6 +2183,7 @@ function renderGuide(){
     else if(t==='h2') h+='<h4 class="guide-h2">'+mdBold(b[1])+'</h4>';
     else if(t==='p') h+='<p class="guide-p">'+mdBold(b[1])+'</p>';
     else if(t==='note') h+='<div class="guide-note"><i class="fas fa-lightbulb"></i><span>'+mdBold(b[1])+'</span></div>';
+    else if(t==='img') h+='<div class="guide-img-wrap"><img src="'+b[1]+'" alt="'+esc(b[2])+'" class="guide-img" loading="lazy"><span class="guide-img-cap">'+esc(b[2])+'</span></div>';
     else if(t==='table'){ h+='<table class="guide-tbl"><thead><tr>'+b[1].map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+b[2].map(r=>'<tr>'+r.map(c=>'<td>'+mdBold(c)+'</td>').join('')+'</tr>').join('')+'</tbody></table>'; }
   });
   closeUl();
