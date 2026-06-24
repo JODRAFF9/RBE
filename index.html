@@ -1117,7 +1117,7 @@ body:not(.home) #page-home{display:none!important}
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   DONNÉES — instantané intégré + MISE À JOUR EN DIRECT (Google Sheets)
+   DONNÉES - instantané intégré + MISE À JOUR EN DIRECT (Google Sheets)
    Le site démarre instantanément sur l'instantané ci-dessous, puis va
    chercher la dernière version sur Google Drive/Sheets à chaque visite.
 ═══════════════════════════════════════════════════════════════ */
@@ -1125,7 +1125,7 @@ const SNAPSHOT=[{"id":1,"rs":"Dakar","ds":"DANGOTE CEMENT SENEGAL","pn":"ALIKO D
 const BUILD_TIME="23/06/2026 \u00e0 21:00";
 
 /* ╔══════════════════════════════════════════════════════════════════╗
-   ║  CONFIGURATION — LIEN DU GOOGLE SHEET (données sur Google Drive)   ║
+   ║  CONFIGURATION - LIEN DU GOOGLE SHEET (données sur Google Drive)   ║
    ║  Collez ci-dessous le lien de partage de votre Google Sheet,       ║
    ║  partagé en « Tous les utilisateurs disposant du lien → Lecteur ». ║
    ║  Laissez vide ("") pour utiliser uniquement l'instantané intégré.  ║
@@ -1139,7 +1139,7 @@ let lastSync=null;
 function getSheetUrl(){ return (GOOGLE_SHEET_URL||'').trim(); }
 
 /* Construit la liste des points d'accès CSV à essayer.
-   1) En direct — fonctionne pour un lien "Publié sur le Web" (/d/e/.../pub) ou un
+   1) En direct - fonctionne pour un lien "Publié sur le Web" (/d/e/.../pub) ou un
       Google Sheet natif partagé publiquement (autorisé par le navigateur).
    2) Repli via relais CORS public au cas où l'accès direct serait bloqué.
    Anti-cache pour toujours obtenir la dernière version. */
@@ -1366,14 +1366,14 @@ async function loadLiveData(opts={}){
     }catch(e){ lastErr=(e&&e.message)||String(e); }
   }
   // Tous les points d'accès ont échoué
-  console.warn('Live data — échec sur tous les endpoints. Dernière erreur :',lastErr);
+  console.warn('Live data - échec sur tous les endpoints. Dernière erreur :',lastErr);
   dataSource='snapshot';
   const isStruct=/^STRUCT:/.test(lastErr);
   const isPerm=/\b40[13]\b|accessible publiquement/i.test(lastErr);
   let tip,short;
-  if(isStruct){short=lastErr.replace('STRUCT:','');tip=' — '+short+' Vérifiez l\'ordre des 13 colonnes du Google Sheet.';}
-  else if(isPerm){short='Feuille non partagée publiquement (HTTP 403)';tip=' — La feuille n\'est pas partagée publiquement. Dans Google Sheets : Partager → « Tous les utilisateurs disposant du lien » → Lecteur.';}
-  else {short=lastErr;tip=' — Vérifiez le partage de la feuille, puis réessayez.';}
+  if(isStruct){short=lastErr.replace('STRUCT:','');tip=' - '+short+' Vérifiez l\'ordre des 13 colonnes du Google Sheet.';}
+  else if(isPerm){short='Feuille non partagée publiquement (HTTP 403)';tip=' - La feuille n\'est pas partagée publiquement. Dans Google Sheets : Partager → « Tous les utilisateurs disposant du lien » → Lecteur.';}
+  else {short=lastErr;tip=' - Vérifiez le partage de la feuille, puis réessayez.';}
   setSyncStatus('error', short);
   if(opts.notify)showToast('Lecture en direct impossible : '+short+tip,'err','fa-triangle-exclamation');
   return false;
@@ -1387,8 +1387,8 @@ function setSyncStatus(state,detail){
   const conf={
     snapshot:{i:'fa-rotate',ti:`Instantané intégré (${BUILD_TIME}). Cliquez pour charger les données en direct.`},
     loading :{i:'fa-rotate fa-spin',ti:'Synchronisation en cours…'},
-    live    :{i:'fa-rotate',ti:`En direct depuis Google Drive — ${fmt(DB.length)} enreg. (sync ${t}). Cliquez pour réactualiser.`},
-    error   :{i:'fa-rotate',ti:(detail||'Direct indisponible')+' — affichage de l\'instantané. Cliquez pour réessayer.'}
+    live    :{i:'fa-rotate',ti:`En direct depuis Google Drive - ${fmt(DB.length)} enreg. (sync ${t}). Cliquez pour réactualiser.`},
+    error   :{i:'fa-rotate',ti:(detail||'Direct indisponible')+' - affichage de l\'instantané. Cliquez pour réessayer.'}
   }[state]||{};
   el.innerHTML=`<i class="fas ${conf.i}"></i> <span class="sync-lbl">Actualiser les données</span>`;
   el.title=conf.ti;   // couleur constante : seul l'état "loading" fait tourner l'icône
@@ -1407,7 +1407,7 @@ function updateFreshBanner(state,detail){
   // On n'affiche QUE l'alerte hors-ligne (panne réelle) ; pas de message de routine.
   if(state==='error'){
     b.classList.add('show','fb-warn');
-    b.innerHTML=`<i class="fas fa-triangle-exclamation fb-ic"></i><span class="fb-tx"><strong>Mode hors-ligne</strong> — affichage de l'instantané intégré, <strong>données arrêtées au ${BUILD_TIME}</strong>. La dernière version n'a pas pu être chargée${detail?' ('+detail+')':''}.</span><button class="fb-btn" onclick="loadLiveData({notify:true})">Réessayer</button>`;
+    b.innerHTML=`<i class="fas fa-triangle-exclamation fb-ic"></i><span class="fb-tx"><strong>Mode hors-ligne</strong> - affichage de l'instantané intégré, <strong>données arrêtées au ${BUILD_TIME}</strong>. La dernière version n'a pas pu être chargée${detail?' ('+detail+')':''}.</span><button class="fb-btn" onclick="loadLiveData({notify:true})">Réessayer</button>`;
   } else {
     b.innerHTML='';   // live / snapshot : aucun bandeau
   }
@@ -1447,7 +1447,7 @@ let dbSort={col:null,dir:1};
 
 
 /* ═══════════════════════════════════════════
-   MODAL EXPORT — Sélection de colonnes
+   MODAL EXPORT - Sélection de colonnes
 ═══════════════════════════════════════════ */
 const ALL_COLS=[
   {key:'ds',lbl:'Dénomination Sociale'},{key:'pn',lbl:'Bénéficiaire'},
@@ -1527,7 +1527,7 @@ async function doExport(){
   }
 
   closeModal('modal-export');
-  showToast(`Export réussi — ${fmt(rows.length)} lignes téléchargées.`,'ok','fa-check-circle');
+  showToast(`Export réussi - ${fmt(rows.length)} lignes téléchargées.`,'ok','fa-check-circle');
 }
 
 /* ═══════════════════════════════════════════
@@ -1826,7 +1826,7 @@ function renderDB(){
   if(dbPg>pages)dbPg=1;
   const s=(dbPg-1)*psz,e=Math.min(s+psz,tot);
   document.getElementById('db-count-lbl').textContent=fmt(tot)+' enregistrement'+(tot>1?'s':'');
-  document.getElementById('db-info').textContent=q?`Filtre "${dbQ}" : ${fmt(tot)} résultat(s) sur ${fmt(FD.length)}`:`${fmt(FD.length)} bénéficiaires dans la sélection — ${fmt(DB.length)} au total`;
+  document.getElementById('db-info').textContent=q?`Filtre "${dbQ}" : ${fmt(tot)} résultat(s) sur ${fmt(FD.length)}`:`${fmt(FD.length)} bénéficiaires dans la sélection - ${fmt(DB.length)} au total`;
   const tb=document.getElementById('db-tbody');tb.innerHTML='';
   dbF.slice(s,e).forEach((r,i)=>{
     const tr=document.createElement('tr');
@@ -2066,7 +2066,7 @@ function exportFichePDF(r,coBe,beCo){
   const W=doc.internal.pageSize.getWidth(),H=doc.internal.pageSize.getHeight();let y=70;
   doc.setFillColor(28,111,165);doc.rect(0,0,W,46,'F');
   doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(15);
-  doc.text('OpenRBE — Fiche du bénéficiaire effectif',40,29);
+  doc.text('OpenRBE - Fiche du bénéficiaire effectif',40,29);
   doc.setTextColor(20,20,20);doc.setFontSize(15);
   doc.splitTextToSize(r.ds||'-',W-80).forEach(l=>{doc.text(l,40,y);y+=18;});
   doc.setDrawColor(200,200,200);doc.line(40,y,W-40,y);y+=20;
@@ -2084,7 +2084,7 @@ function exportFichePDF(r,coBe,beCo){
 }
 
 /* ═══════════════════════════════════════════
-   GUIDE NOVICE — contenu unique (HTML + PDF)
+   GUIDE NOVICE - contenu unique (HTML + PDF)
 ═══════════════════════════════════════════ */
 const GUIDE=[
  ["h1","1. À quoi sert OpenRBE ?"],
@@ -2262,7 +2262,7 @@ function downloadGuidePDF(){
     const pg=doc.internal.getCurrentPageInfo().pageNumber;
     doc.setFontSize(8);doc.setTextColor(...CLG);
     doc.setFont('helvetica','normal');
-    doc.text("OpenRBE — Guide d'utilisation · CN-ITIE Sénégal",ML,H-28);
+    doc.text("OpenRBE - Guide d'utilisation · CN-ITIE Sénégal",ML,H-28);
     doc.text('Page '+pg,W-MR,H-28,{align:'right'});
     doc.setDrawColor(...CBORD);doc.setLineWidth(.5);doc.line(ML,H-38,W-MR,H-38);
   }
@@ -2340,7 +2340,7 @@ function downloadGuidePDF(){
   for(let i=2;i<=totalPg;i++){
     doc.setPage(i); addHeader();
     doc.setFontSize(8);doc.setTextColor(...CLG);
-    doc.text("OpenRBE — Guide d'utilisation · CN-ITIE Sénégal",ML,H-28);
+    doc.text("OpenRBE - Guide d'utilisation · CN-ITIE Sénégal",ML,H-28);
     doc.text('Page '+(i-1)+' / '+(totalPg-1),W-MR,H-28,{align:'right'});
     doc.setDrawColor(...CBORD);doc.setLineWidth(.5);doc.line(ML,H-38,W-MR,H-38);
   }
@@ -2353,7 +2353,7 @@ let dbT;
 document.getElementById('db-search').addEventListener('input',function(){clearTimeout(dbT);dbQ=this.value;dbT=setTimeout(()=>{dbPg=1;renderDB();},200);});
 
 /* ═══════════════════════════════════════════
-   RECHERCHE — SWITCH ONGLETS
+   RECHERCHE - SWITCH ONGLETS
 ═══════════════════════════════════════════ */
 function switchSearchTab(tab){
   document.getElementById('stab-co').classList.toggle('active', tab==='co');
@@ -2386,7 +2386,7 @@ function showCoDD(){
     d.addEventListener('click',()=>{si.value=c;sdd.style.display='none';renderCC(c);});
     sdd.appendChild(d);
   });
-  if(list.length>DD_CAP){const d=document.createElement('div');d.className='ddi ddi-note';d.style.cssText='opacity:.6;cursor:default;font-style:italic';d.textContent='… et '+(list.length-DD_CAP)+' autres — précisez votre recherche';sdd.appendChild(d);}
+  if(list.length>DD_CAP){const d=document.createElement('div');d.className='ddi ddi-note';d.style.cssText='opacity:.6;cursor:default;font-style:italic';d.textContent='… et '+(list.length-DD_CAP)+' autres - précisez votre recherche';sdd.appendChild(d);}
   sdd.style.display='block';
 }
 si.addEventListener('input',showCoDD);
@@ -2415,7 +2415,7 @@ function showBeDD(){
     d.addEventListener('click',()=>{siBe.value=b;sddBe.style.display='none';renderBeneficiaire(b);});
     sddBe.appendChild(d);
   });
-  if(list.length>DD_CAP){const d=document.createElement('div');d.className='ddi ddi-note';d.style.cssText='opacity:.6;cursor:default;font-style:italic';d.textContent='… et '+(list.length-DD_CAP)+' autres — précisez votre recherche';sddBe.appendChild(d);}
+  if(list.length>DD_CAP){const d=document.createElement('div');d.className='ddi ddi-note';d.style.cssText='opacity:.6;cursor:default;font-style:italic';d.textContent='… et '+(list.length-DD_CAP)+' autres - précisez votre recherche';sddBe.appendChild(d);}
   sddBe.style.display='block';
 }
 siBe.addEventListener('input',showBeDD);
@@ -2450,7 +2450,7 @@ function setupNetSearch(inputId,ddId,getList,type){
       d.addEventListener('click',()=>{inp.value=x;dd.style.display='none';focusNode(x,type);});
       dd.appendChild(d);
     });
-    if(list.length>DD_CAP){const d=document.createElement('div');d.className='ddi ddi-note';d.style.cssText='opacity:.6;cursor:default;font-style:italic';d.textContent='… et '+(list.length-DD_CAP)+' autres — précisez votre recherche';dd.appendChild(d);}
+    if(list.length>DD_CAP){const d=document.createElement('div');d.className='ddi ddi-note';d.style.cssText='opacity:.6;cursor:default;font-style:italic';d.textContent='… et '+(list.length-DD_CAP)+' autres - précisez votre recherche';dd.appendChild(d);}
     dd.style.display='block';
   };
   inp.addEventListener('input',show);
@@ -2672,7 +2672,7 @@ function updateMap(){
     const val=s[fk]||0,rad=10+(val/maxV)*45;
     L.circleMarker(c,{radius:rad,fillColor:val?CL.g:'#ccc',fillOpacity:.2+.65*(val/maxV),color:CL.gd,weight:1.5})
      .bindPopup(`<div style="font-family:DM Sans,sans-serif;min-width:190px"><div style="font-size:15px;font-weight:700;color:#2799D7;border-bottom:2px solid #2799D7;padding-bottom:5px;margin-bottom:8px">${s.region}</div><table style="width:100%;font-size:13px"><tr><td>Entreprises</td><td style="text-align:right;font-weight:600">${s.ne}</td></tr><tr><td>Bénéficiaires</td><td style="text-align:right;font-weight:600">${s.nb}</td></tr><tr><td style="color:#1C6FA5;font-weight:600">PPE</td><td style="text-align:right;color:#1C6FA5;font-weight:700">${s.np}</td></tr></table></div>`)
-     .bindTooltip(`${s.region} — ${label} : ${val}`,{sticky:true}).addTo(leafMap);
+     .bindTooltip(`${s.region} - ${label} : ${val}`,{sticky:true}).addTo(leafMap);
   });
   const tb=document.querySelector('#tbl-reg tbody');
   tb.innerHTML=rs.map(s=>`<tr><td><span class="bg">${s.region}</span></td><td>${s.ne}</td><td><strong>${s.nb}</strong></td><td style="${s.np>0?'color:var(--r);font-weight:700':''}">${s.np}</td></tr>`).join('');
@@ -2752,7 +2752,7 @@ function zoomNode(nd){
   const lk=nLinks.filter(l=>(l.source.id||l.source)===nd.id||(l.target.id||l.target)===nd.id);
   const isCo=nd.group==='co';
   const info=document.getElementById('nib');info.style.display='flex';
-  info.innerHTML=`<div class="niico" style="background:${isCo?CL.g:CL.yd}"><i class="fas ${isCo?'fa-building':'fa-user'}"></i></div><div><strong style="font-size:14px;display:block">${nd.full}</strong><span style="font-size:12px;color:var(--gray)">${isCo?'Entreprise':'Bénéficiaire'} — ${lk.length} ${isCo?'bénéficiaire(s) relié(s)':'entreprise(s) reliée(s)'}</span></div>`;
+  info.innerHTML=`<div class="niico" style="background:${isCo?CL.g:CL.yd}"><i class="fas ${isCo?'fa-building':'fa-user'}"></i></div><div><strong style="font-size:14px;display:block">${nd.full}</strong><span style="font-size:12px;color:var(--gray)">${isCo?'Entreprise':'Bénéficiaire'} - ${lk.length} ${isCo?'bénéficiaire(s) relié(s)':'entreprise(s) reliée(s)'}</span></div>`;
 }
 function focusNode(val,type){
   if(!val)return;
@@ -2784,7 +2784,7 @@ function renderAll(){
 
 
 /* ═══════════════════════════════════════════
-   UX — PASSWORD TOGGLE
+   UX - PASSWORD TOGGLE
 ═══════════════════════════════════════════ */
 function addPwdToggle(inputId){
   const inp=document.getElementById(inputId);
@@ -2802,7 +2802,7 @@ function addPwdToggle(inputId){
 }
 
 /* ═══════════════════════════════════════════
-   UX — FILTRES ACTIFS (tags visuels)
+   UX - FILTRES ACTIFS (tags visuels)
 ═══════════════════════════════════════════ */
 function updateActiveTags(){
   const bar=document.getElementById('active-filters-bar');
@@ -2826,7 +2826,7 @@ function updateActiveTags(){
 }
 
 /* ═══════════════════════════════════════════
-   UX — VALIDATION FORMULAIRES
+   UX - VALIDATION FORMULAIRES
 ═══════════════════════════════════════════ */
 function validateEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);}
 
@@ -2840,7 +2840,7 @@ function highlightInvalid(id,msg){
 }
 
 /* ═══════════════════════════════════════════
-   UX — NOMBRE DE RÉSULTATS DANS SIDEBAR
+   UX - NOMBRE DE RÉSULTATS DANS SIDEBAR
 ═══════════════════════════════════════════ */
 function updateSidebarCount(){
   const el=document.getElementById('scn');
