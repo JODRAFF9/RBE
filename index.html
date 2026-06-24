@@ -1404,6 +1404,8 @@ function updateFreshBanner(state,detail){
   if(!b)return;
   if(state==='loading')return;   // ne pas faire clignoter pendant la synchro
   b.className='';
+  // Ne pas afficher le bandeau sur l'onglet guide
+  if(document.getElementById('page-guide')&&document.getElementById('page-guide').style.display!=='none'){b.innerHTML='';return;}
   // On n'affiche QUE l'alerte hors-ligne (panne réelle) ; pas de message de routine.
   if(state==='error'){
     b.classList.add('show','fb-warn');
@@ -1578,7 +1580,8 @@ document.querySelectorAll('.nav-bar a').forEach(a=>{
     if(pg==='network')buildNet();
     if(pg==='ppe')renderPPE();
     if(pg==='database')renderDB();
-    if(pg==='guide')renderGuide();
+    if(pg==='guide'){renderGuide();const fb=document.getElementById('fresh-banner');if(fb){fb.classList.remove('show');fb.innerHTML='';}}
+
     // Convivialité : remonter en haut du contenu à chaque changement d'onglet
     const ct=document.getElementById('ct');
     window.scrollTo({top:0,behavior:'smooth'});
