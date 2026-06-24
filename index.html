@@ -1635,14 +1635,17 @@ window.addEventListener('scroll',()=>{
    FILTRES
 ═══════════════════════════════════════════ */
 function popF(){
+  const REGIONS_SN=['Dakar','Diourbel','Fatick','Kaffrine','Kaolack','Kédougou','Kolda','Louga','Matam','Saint-Louis','Sédhiou','Tambacounda','Thiès','Ziguinchor'];
   const fill=(id,arr,ph)=>{
     const el=document.getElementById(id);
     const cur=el.value;
     el.innerHTML='<option value="">'+ph+'</option>';
     arr.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;el.appendChild(o);});
-    if(cur&&arr.includes(cur)) el.value=cur;   // conserver la sélection après actualisation
+    if(cur&&arr.includes(cur)) el.value=cur;
   };
-  fill('fr',[...new Set(DB.map(r=>r.rs).filter(Boolean))].sort(),'Toutes les régions');
+  const dbRegions=[...new Set(DB.map(r=>r.rs).filter(Boolean))];
+  const allRegions=[...new Set([...REGIONS_SN,...dbRegions])].sort();
+  fill('fr',allRegions,'Toutes les régions');
   fill('fn',[...new Set(DB.map(r=>r.na).filter(Boolean))].sort(),'Toutes les nationalités');
   fill('fp',[...new Set(DB.map(r=>r.pr).filter(Boolean))].sort(),'Tous les pays');
 }
