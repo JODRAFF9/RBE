@@ -2213,25 +2213,21 @@ function renderGuide(){
     toc.innerHTML=th;
   }
   // Scroll spy
-  const card=document.getElementById('page-guide');
-  if(card) card.addEventListener('scroll',updateTocActive,{passive:true});
+  window.addEventListener('scroll',updateTocActive,{passive:true});
   guideRendered=true;
 }
 
 function tocClick(e,id){
   e.preventDefault();
   const el=document.getElementById(id);
-  const pg=document.getElementById('page-guide');
-  if(el&&pg) pg.scrollTo({top:el.offsetTop-20,behavior:'smooth'});
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function updateTocActive(){
-  const pg=document.getElementById('page-guide'); if(!pg)return;
-  const scroll=pg.scrollTop;
-  const headings=pg.querySelectorAll('.guide-h1');
+  const headings=document.querySelectorAll('#page-guide .guide-h1');
   let active=null;
-  headings.forEach(h=>{if(h.offsetTop-40<=scroll)active=h.id;});
-  pg.querySelectorAll('.guide-toc a').forEach(a=>{
+  headings.forEach(h=>{if(h.getBoundingClientRect().top<=80)active=h.id;});
+  document.querySelectorAll('.guide-toc a').forEach(a=>{
     a.classList.toggle('toc-active',a.getAttribute('href')==='#'+active);
   });
 }
