@@ -2234,51 +2234,119 @@ function updateTocActive(){
 function downloadGuidePDF(){
   const J=window.jspdf&&window.jspdf.jsPDF;
   if(!J){showToast('Module PDF non chargé.','err','fa-triangle-exclamation');return;}
-  const doc=new J({unit:'pt',format:'a4'});
+  const doc=new J({unit:’pt’,format:’a4’});
   const W=doc.internal.pageSize.getWidth(), H=doc.internal.pageSize.getHeight();
-  const ML=48, MR=48, TW=W-ML-MR; let y=120;
-  const strip=s=>s.replace(/\*\*(.+?)\*\*/g,'$1').replace(/→/g,'›');
-  doc.setFillColor(28,111,165);doc.rect(0,0,W,90,'F');
-  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(21);
-  doc.text('OpenRBE',ML,46);
-  doc.setFont('helvetica','normal');doc.setFontSize(12);
-  doc.text("Guide d'utilisation — pour bien démarrer",ML,69);
-  const needNew=ex=>{ if(y+ex>H-50){ doc.addPage(); y=64; } };
+  const ML=52, MR=52, TW=W-ML-MR;
+  const C1=[28,111,165], C2=[0,61,97], CG=[60,72,84], CLG=[130,145,158], CBORD=[213,222,230];
+  const strip=s=>String(s||’-’).replace(/\*\*(.+?)\*\*/g,’$1’).replace(/[→]/g,’>’).replace(/&nbsp;/g,’ ‘);
+
+  // ── COVER PAGE ──
+  doc.setFillColor(...C1);doc.rect(0,0,W,H,’F’);
+  doc.setFillColor(255,255,255);doc.rect(ML-10,H/2-120,TW+20,200,’F’);
+  doc.setTextColor(...C1);doc.setFont(‘helvetica’,’bold’);doc.setFontSize(32);
+  doc.text(‘OpenRBE’,ML,H/2-68);
+  doc.setFont(‘helvetica’,’normal’);doc.setFontSize(14);doc.setTextColor(...CG);
+  doc.text("Registre des Bénéficiaires Effectifs",ML,H/2-46);
+  doc.setDrawColor(...C1);doc.setLineWidth(2);doc.line(ML,H/2-34,ML+TW,H/2-34);
+  doc.setFont(‘helvetica’,’bold’);doc.setFontSize(18);doc.setTextColor(...C2);
+  doc.text("Guide d’utilisation",ML,H/2-14);
+  doc.setFont(‘helvetica’,’normal’);doc.setFontSize(11);doc.setTextColor(...CG);
+  doc.text("Tout ce qu’il faut savoir pour utiliser OpenRBE,",ML,H/2+12);
+  doc.text("sans aucune connaissance technique.",ML,H/2+28);
+  doc.setFontSize(9);doc.setTextColor(200,220,240);
+  doc.text(‘CN-ITIE Senegal  |  itie.sn’,ML,H-40);
+  doc.addPage();
+
+  // ── CONTENT PAGES ──
+  let y=72;
+  const needNew=ex=>{ if(y+ex>H-56){ addFooter(); doc.addPage(); y=60; } };
+  function addFooter(){
+    const pg=doc.internal.getCurrentPageInfo().pageNumber;
+    doc.setFontSize(8);doc.setTextColor(...CLG);
+    doc.setFont(‘helvetica’,’normal’);
+    doc.text(‘OpenRBE — Guide d’utilisation · CN-ITIE Sénégal’,ML,H-28);
+    doc.text(‘Page ‘+pg,W-MR,H-28,{align:’right’});
+    doc.setDrawColor(...CBORD);doc.setLineWidth(.5);doc.line(ML,H-38,W-MR,H-38);
+  }
+  // Running header after cover
+  function addHeader(){
+    doc.setFillColor(245,248,251);doc.rect(0,0,W,44,’F’);
+    doc.setDrawColor(...CBORD);doc.setLineWidth(.5);doc.line(0,44,W,44);
+    doc.setFont(‘helvetica’,’bold’);doc.setFontSize(9);doc.setTextColor(...C1);
+    doc.text(‘OpenRBE’,ML,28);
+    doc.setFont(‘helvetica’,’normal’);doc.setTextColor(...CLG);
+    doc.text("Guide d’utilisation",ML+58,28);
+  }
+  addHeader();
+
   function writeLines(text,o){
-    const lh=o.lh||o.size*1.35, ind=o.indent||0, bul=o.bullet;
-    doc.setFont('helvetica',o.font||'normal');doc.setFontSize(o.size);doc.setTextColor(o.c[0],o.c[1],o.c[2]);
-    const lines=doc.splitTextToSize(text, TW-ind-(bul?12:0));
-    lines.forEach((ln,i)=>{ needNew(lh);
-      if(bul&&i===0){ doc.setFillColor(39,153,215);doc.circle(ML+ind+3, y-3.2, 1.7,'F'); }
-      doc.text(ln, ML+ind+(bul?12:0), y); y+=lh; });
+    const lh=o.lh||o.size*1.45, ind=o.indent||0, bul=o.bullet;
+    doc.setFont(‘helvetica’,o.font||’normal’);doc.setFontSize(o.size);
+    doc.setTextColor(o.c[0],o.c[1],o.c[2]);
+    const lines=doc.splitTextToSize(text, TW-ind-(bul?14:0));
+    lines.forEach((ln,i)=>{
+      needNew(lh);
+      if(bul&&i===0){doc.setFillColor(...C1);doc.circle(ML+ind+3.5,y-3,2,’F’);}
+      doc.text(ln,ML+ind+(bul?14:0),y);y+=lh;
+    });
   }
   GUIDE.forEach(b=>{
     const t=b[0];
-    if(t==='h1'){ y+=12; needNew(30); doc.setDrawColor(28,111,165);doc.setLineWidth(3);doc.line(ML,y-13,ML+22,y-13);
-      writeLines(strip(b[1]),{size:14,c:[28,111,165],font:'bold',lh:19}); y+=4; }
-    else if(t==='h2'){ y+=8; writeLines(strip(b[1]),{size:11.5,c:[0,61,97],font:'bold',lh:16}); y+=2; }
-    else if(t==='p'){ writeLines(strip(b[1]),{size:10,c:[44,54,64],lh:14}); y+=6; }
-    else if(t==='li'){ writeLines(strip(b[1]),{size:10,c:[44,54,64],lh:13.5,indent:10,bullet:true}); y+=2; }
-    else if(t==='note'){ const lines=doc.splitTextToSize(strip(b[1]),TW-24); const bh=lines.length*13+14;
-      needNew(bh+6); doc.setFillColor(232,244,251);doc.setDrawColor(111,184,221);doc.setLineWidth(.8);
-      doc.roundedRect(ML,y-10,TW,bh,4,4,'FD');
-      doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(28,111,165);
-      let yy=y+5; lines.forEach(ln=>{doc.text(ln,ML+12,yy);yy+=13;}); y+=bh+8; }
-    else if(t==='table'){ y+=8; const cols=b[1], rows=b[2], cw=[TW*0.52,TW*0.48];
-      const drawRow=(cells,head)=>{ doc.setFont('helvetica',head?'bold':'normal');doc.setFontSize(9.5);
-        const wr=cells.map((c,i)=>doc.splitTextToSize(strip(c),cw[i]-12));
-        const rh=Math.max.apply(null,wr.map(w=>w.length))*12+9; needNew(rh);
-        if(head){doc.setFillColor(28,111,165);doc.rect(ML,y-11,TW,rh,'F');doc.setTextColor(255,255,255);}
-        else{doc.setTextColor(44,54,64);}
-        let x=ML; wr.forEach((w,i)=>{let yy=y; w.forEach(ln=>{doc.text(ln,x+6,yy);yy+=12;}); x+=cw[i];});
-        doc.setDrawColor(220,225,232);doc.line(ML,y-11+rh,ML+TW,y-11+rh); y+=rh; };
-      drawRow(cols,true); rows.forEach(r=>drawRow(r,false)); y+=8; }
+    if(t===’img’) return; // skip images in PDF
+    if(t===’h1’){
+      y+=16; needNew(36);
+      doc.setFillColor(240,246,252);doc.rect(ML-8,y-18,TW+16,28,’F’);
+      doc.setFillColor(...C1);doc.rect(ML-8,y-18,4,28,’F’);
+      writeLines(strip(b[1]),{size:13,c:C1,font:’bold’,lh:20}); y+=6;
+    }
+    else if(t===’h2’){
+      y+=10; needNew(22);
+      writeLines(strip(b[1]),{size:11,c:C2,font:’bold’,lh:17}); y+=3;
+    }
+    else if(t===’p’){
+      needNew(16);
+      writeLines(strip(b[1]),{size:10,c:CG,lh:15}); y+=5;
+    }
+    else if(t===’li’){
+      needNew(16);
+      writeLines(strip(b[1]),{size:10,c:CG,lh:14,indent:14,bullet:true}); y+=3;
+    }
+    else if(t===’note’){
+      const lines=doc.splitTextToSize(strip(b[1]),TW-28); const bh=lines.length*14+18;
+      needNew(bh+10);
+      doc.setFillColor(232,244,251);doc.setDrawColor(111,184,221);doc.setLineWidth(1);
+      doc.roundedRect(ML,y-12,TW,bh,5,5,’FD’);
+      doc.setFont(‘helvetica’,’italic’);doc.setFontSize(9.5);doc.setTextColor(...C1);
+      let yy=y+4; lines.forEach(ln=>{doc.text(ln,ML+14,yy);yy+=14;}); y+=bh+10;
+    }
+    else if(t===’table’){
+      y+=10; const cols=b[1], rows=b[2], cw=[TW*0.50,TW*0.50];
+      const altC=[246,249,252];
+      const drawRow=(cells,head,alt)=>{
+        doc.setFont(‘helvetica’,head?’bold’:’normal’);doc.setFontSize(9.5);
+        const wr=cells.map((c,i)=>doc.splitTextToSize(strip(c),cw[i]-16));
+        const rh=Math.max(...wr.map(w=>w.length))*13+10; needNew(rh);
+        if(head){doc.setFillColor(...C1);doc.rect(ML,y-12,TW,rh,’F’);doc.setTextColor(255,255,255);}
+        else if(alt){doc.setFillColor(...altC);doc.rect(ML,y-12,TW,rh,’F’);doc.setTextColor(...CG);}
+        else{doc.setTextColor(...CG);}
+        let x=ML; wr.forEach((w,i)=>{let yy=y; w.forEach(ln=>{doc.text(ln,x+8,yy);yy+=13;}); x+=cw[i];});
+        doc.setDrawColor(...CBORD);doc.setLineWidth(.4);doc.line(ML,y-12+rh,ML+TW,y-12+rh);
+        y+=rh;
+      };
+      drawRow(cols,true); rows.forEach((r,i)=>drawRow(r,false,i%2===0)); y+=10;
+    }
   });
-  const n=doc.internal.getNumberOfPages();
-  for(let i=1;i<=n;i++){ doc.setPage(i);doc.setFontSize(8);doc.setTextColor(150,150,150);
-    doc.text('OpenRBE — Guide d’utilisation · CN-ITIE Sénégal',ML,H-26);
-    doc.text('Page '+i+' / '+n, W-MR, H-26, {align:'right'}); }
-  doc.save('Guide_OpenRBE.pdf');
+  addFooter();
+  // Add footers to all content pages
+  const totalPg=doc.internal.getNumberOfPages();
+  for(let i=2;i<=totalPg;i++){
+    doc.setPage(i); addHeader();
+    doc.setFontSize(8);doc.setTextColor(...CLG);
+    doc.text(‘OpenRBE — Guide d’utilisation · CN-ITIE Sénégal’,ML,H-28);
+    doc.text(‘Page ‘+(i-1)+’ / ‘+(totalPg-1),W-MR,H-28,{align:’right’});
+    doc.setDrawColor(...CBORD);doc.setLineWidth(.5);doc.line(ML,H-38,W-MR,H-38);
+  }
+  doc.save(‘Guide_OpenRBE.pdf’);
   showToast('Guide PDF téléchargé.','ok','fa-file-pdf');
 }
 function dbNav(d){dbPg+=d;renderDB();}
