@@ -80,8 +80,15 @@ body.nav-light .sb-drop-btn{color:var(--gray)}
 body.nav-light .sb-drop-btn:hover,body.nav-light .sb-drop-btn.open{color:var(--gd);border-bottom-color:var(--g)}
 .sb-drop-arrow{font-size:.7rem;transition:transform .25s}
 .sb-drop-btn.open .sb-drop-arrow{transform:rotate(180deg)}
-.sb-panel{display:none;position:absolute;top:100%;right:0;width:280px;background:#fff;border:1px solid var(--brd);border-top:none;border-radius:0 0 8px 8px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:2000;padding:14px 16px;max-height:70vh;overflow-y:auto}
+.sb-panel{display:none;position:absolute;top:100%;right:0;width:280px;background:rgba(15,40,70,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);border-top:none;border-radius:0 0 8px 8px;box-shadow:0 8px 24px rgba(0,0,0,.35);z-index:2000;padding:14px 16px;max-height:70vh;overflow-y:auto;color:#fff}
 .sb-panel.open{display:block;animation:fu .2s ease}
+.sb-panel .fl{color:rgba(255,255,255,.55)}
+.sb-panel select{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.2)}
+.sb-panel select option{background:#0f2846;color:#fff}
+.sb-panel .sw-row{color:rgba(255,255,255,.85)}
+.sb-panel .btn-rst{background:rgba(220,53,69,.15);color:#ff6b7a;border-color:rgba(220,53,69,.4)}
+.sb-panel .btn-rst:hover{background:rgba(220,53,69,.35);color:#fff}
+.sb-panel .active-filters-bar .af-chip{background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.2)}
 body.no-filters .sb-dropdown,body.home .sb-dropdown{display:none!important}
 .sb-toggle{display:none}
 #ct{width:100%}
