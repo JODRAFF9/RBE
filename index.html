@@ -1627,9 +1627,15 @@ function popF(){
     arr.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;el.appendChild(o);});
     if(cur&&arr.includes(cur)) el.value=cur;
   };
-  const dbRegions=[...new Set(DB.map(r=>r.rs).filter(Boolean))];
-  const allRegions=[...new Set([...REGIONS_SN,...dbRegions])].sort();
-  fill('fr',allRegions,'Toutes les régions');
+  const dbRegions=[...new Set(DB.map(r=>r.rs).filter(Boolean))].sort();
+  const otherRegions=REGIONS_SN.filter(r=>!dbRegions.includes(r)).sort();
+  const el=document.getElementById('fr');
+  const cur=el.value;
+  el.innerHTML='<option value="">Toutes les régions</option>';
+  dbRegions.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;el.appendChild(o);});
+  if(otherRegions.length){const sep=document.createElement('option');sep.disabled=true;sep.textContent='── autres régions ──';el.appendChild(sep);}
+  otherRegions.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;el.appendChild(o);});
+  if(cur&&el.querySelector(`option[value="${cur}"]`))el.value=cur;
   fill('fn',[...new Set(DB.map(r=>r.na).filter(Boolean))].sort(),'Toutes les nationalités');
   fill('fp',[...new Set(DB.map(r=>r.pr).filter(Boolean))].sort(),'Tous les pays');
 }
