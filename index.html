@@ -1619,7 +1619,7 @@ document.querySelectorAll('.nav-bar a').forEach(a=>{
     const pg=a.dataset.page;
     document.getElementById('page-'+pg).classList.add('active');
     document.body.classList.toggle('home', pg==='home');
-    const FILTER_PAGES=['dashboard','map'];
+    const FILTER_PAGES=['dashboard','map','database','ppe','network'];
     document.body.classList.toggle('no-filters', !FILTER_PAGES.includes(pg) && pg!=='home');
     if(pg==='home')renderHomeNums();
     setTimeout(updateNavTheme, 30);
