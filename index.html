@@ -146,6 +146,7 @@ input[type=range]{width:100%;accent-color:var(--g)}
 .sw input,.netsw input{padding-right:32px!important}
 /* ── Bouton « retour en haut » ── */
 #btt{position:fixed;bottom:22px;right:22px;width:46px;height:46px;border-radius:50%;background:var(--g);color:#fff;border:none;box-shadow:var(--sh-l);font-size:1.05rem;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(12px);transition:.25s;z-index:1500}
+#mob-filter-btn{display:none}
 #btt.show{opacity:1;pointer-events:auto;transform:translateY(0)}
 #btt:hover{background:var(--gd);transform:translateY(-2px)}
 /* ── Accessibilité : focus visible ── */
@@ -188,6 +189,13 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{ou
   .kr{grid-template-columns:1fr 1fr;gap:8px}
   .nav-bar ul{padding:0 8px}
   .nav-bar li a{padding:9px 11px;font-size:.8rem}
+  /* Cacher le bouton filtre dans la nav sur mobile */
+  .sb-dropdown{display:none!important}
+  /* Bouton flottant filtre en bas */
+  #mob-filter-btn{display:flex;position:fixed;bottom:20px;right:20px;z-index:8000;align-items:center;gap:8px;background:var(--gd);color:#fff;border:none;border-radius:50px;padding:12px 20px;font-size:.88rem;font-weight:700;font-family:var(--font);box-shadow:0 4px 16px rgba(0,0,0,.3);cursor:pointer}
+  body.home #mob-filter-btn,body.no-filters #mob-filter-btn{display:none!important}
+  /* Panel filtre réduit sur mobile */
+  #sb.open{display:block;position:fixed;bottom:0;left:0;right:0;width:100%;max-height:45vh;border-radius:16px 16px 0 0;border:none;border-top:2px solid rgba(255,255,255,.2);z-index:9999;top:auto;overflow-y:auto;padding:16px}
   #btt{bottom:16px;right:16px;width:42px;height:42px}
 }
 .cw{position:relative;height:285px}.cw canvas{max-height:285px}
@@ -1072,6 +1080,7 @@ body:not(.home) #page-home{display:none!important}
 
 
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut" aria-label="Retour en haut"><i class="fas fa-arrow-up"></i></button>
+<button id="mob-filter-btn" onclick="toggleSbFold(event)"><i class="fas fa-filter"></i> Filtres</button>
 
 <!-- ══ MODAL FICHE DÉTAILLÉE ══ -->
 <div class="modal-overlay hidden" id="modal-detail" onclick="closeOnBg(event,'modal-detail')">
