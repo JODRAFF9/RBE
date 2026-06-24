@@ -1405,7 +1405,7 @@ function updateFreshBanner(state,detail){
   if(state==='loading')return;   // ne pas faire clignoter pendant la synchro
   b.className='';
   // Ne pas afficher le bandeau sur l'onglet guide
-  if(document.getElementById('page-guide')&&document.getElementById('page-guide').style.display!=='none'){b.innerHTML='';return;}
+  if(document.getElementById('page-guide')&&document.getElementById('page-guide').classList.contains('active')){b.innerHTML='';return;}
   // On n'affiche QUE l'alerte hors-ligne (panne réelle) ; pas de message de routine.
   if(state==='error'){
     b.classList.add('show','fb-warn');
