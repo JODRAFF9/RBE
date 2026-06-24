@@ -1633,7 +1633,6 @@ function popF(){
   const cur=el.value;
   el.innerHTML='<option value="">Toutes les régions</option>';
   dbRegions.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;el.appendChild(o);});
-  if(otherRegions.length){const sep=document.createElement('option');sep.disabled=true;sep.textContent='── autres régions ──';el.appendChild(sep);}
   otherRegions.forEach(x=>{const o=document.createElement('option');o.value=x;o.textContent=x;el.appendChild(o);});
   if(cur&&el.querySelector(`option[value="${cur}"]`))el.value=cur;
   fill('fn',[...new Set(DB.map(r=>r.na).filter(Boolean))].sort(),'Toutes les nationalités');
