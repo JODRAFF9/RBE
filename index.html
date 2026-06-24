@@ -1269,46 +1269,90 @@ function parseDate(v){
   return {da:`${String(d).padStart(2,'0')}/${String(mo).padStart(2,'0')}/${y}`,an:y};
 }
 
-/* Transforme les lignes CSV brutes en enregistrements (mêmes règles que build.py) */
+const noAccent=s=>(s==null?'':String(s)).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+/* ── Mapping robuste par nom de colonne ──────────────────────────────────────
+   Chaque champ interne est associé à une liste de synonymes normalisés.
+   La colonne est trouvée par son nom, pas par sa position.
+   Insensible aux accents, à la casse, aux espaces superflus.
+─────────────────────────────────────────────────────────────────────────────*/
+const COL_MAP=[
+  {key:'rs',  syn:['region','localite','localisation','departement','district','wilaya','prefecture']},
+  {key:'ds',  syn:['denomination','denominationsociale','raisonsociale','societe','entreprise','nomentite','entite','nomentreprise','nomdelentite']},
+  {key:'pn',  syn:['beneficiaire','beneficiaireeffectif','nomprenoms','nomprenom','nomcomplet','nom','personne','identite','proprietaire']},
+  {key:'da',  syn:['dateacquisition','datedeclaration','datedepot','date','dateenregistrement','dateinscription']},
+  {key:'pa',  syn:['pourcentageaction','partaction','paction','partcapital','pourcentagecapital','pcapital','action','participation','pourcentage','pourcent','part']},
+  {key:'pv',  syn:['pourcentagevoix','partvoix','pvoix','droitdevote','voix','vote','droitvote']},
+  {key:'na',  syn:['nationalite','nationalitefr','citoyennete','natio','nat']},
+  {key:'pr',  syn:['paysderesidence','paysresidence','pays','residence','paysbeneficiaire','paysnationalite']},
+  {key:'pp',  syn:['ppe','personnepoliquementexposee','politiquementexpose','personneexposee','exposepolitiquement','politiqueexpose']},
+  {key:'fp',  syn:['fonctionppe','fonctionpolitique','fonction','poste','qualite','titre']},
+  {key:'np',  syn:['nomppelieaubeneficiaire','nomppelieaubenef','lienppe','nompplie','pplie','nomdu','personneliee']},
+  {key:'gr',  syn:['greffe','tribunaldecommerce','tribunal','registre','greffetribunal','lieu']},
+];
+
+/* Normalise un en-tête : minuscules, sans accents, sans espaces ni tirets ni _ */
+function normHead(s){
+  return noAccent(String(s==null?'':s)).replace(/[\s_\-\/\.\(\)]+/g,'');
+}
+
+/* Trouve la ligne d'en-tête dans les N premières lignes du tableau.
+   Retourne {headerIdx, colIdx} ou null si introuvable. */
+function findHeader(rows){
+  const REQUIRED=['ds','pn'];   // au moins ces deux doivent être trouvés
+  for(let i=0;i<Math.min(12,rows.length);i++){
+    const row=rows[i]||[];
+    const normed=row.map(normHead);
+    const colIdx={};
+    for(const {key,syn} of COL_MAP){
+      const pos=normed.findIndex(h=>syn.includes(h)||syn.some(s=>h.includes(s)&&h.length<s.length+6));
+      if(pos!==-1) colIdx[key]=pos;
+    }
+    if(REQUIRED.every(k=>colIdx[k]!==undefined))
+      return {headerIdx:i, colIdx};
+  }
+  return null;
+}
+
+/* Transforme les lignes brutes en enregistrements via mapping par nom de colonne */
 function normalizeRows(rows){
   if(!rows.length)return [];
-  // Détecter et retirer la ligne d'en-tête
-  let start=0;
-  const head=(rows[0]||[]).join(' ').toLowerCase();
-  if(/d[ée]nomination|r[ée]gion|b[ée]n[ée]ficiaire/.test(head)) start=1;
+  const found=findHeader(rows);
+  if(!found)return [];
+  const {headerIdx,colIdx}=found;
+  const g=(r,key)=>{
+    const idx=colIdx[key];
+    return idx!==undefined && r[idx]!==undefined ? r[idx] : '';
+  };
   const out=[];let id=0;
-  for(let i=start;i<rows.length;i++){
-    const r=rows[i];if(!r)continue;
-    const g=k=>r[k]!==undefined?r[k]:'';
-    const ds=cleanCell(g(1));
-    if(!ds)continue;                       // ignorer lignes sans dénomination sociale
-    let region=cleanCell(g(0)); if(region)region=titleCase(region);
-    const {da,an}=parseDate(g(3));
-    let fp=cleanCell(g(9)); if(fp==='0'||fp==='1')fp=null;
+  for(let i=headerIdx+1;i<rows.length;i++){
+    const r=rows[i];
+    if(!r||r.every(c=>String(c==null?'':c).trim()===''))continue;  // ligne vide
+    const ds=cleanCell(g(r,'ds'));
+    if(!ds)continue;
+    let region=cleanCell(g(r,'rs')); if(region)region=titleCase(region);
+    const {da,an}=parseDate(g(r,'da'));
+    let fp=cleanCell(g(r,'fp')); if(fp==='0'||fp==='1')fp=null;
     id++;
     out.push({
-      id, rs:region, ds, pn:cleanCell(g(2)),
+      id, rs:region, ds, pn:cleanCell(g(r,'pn')),
       da, an,
-      pa:numClamp(g(4)), pv:numClamp(g(5)),
-      na:fixCountry(cleanCell(g(6))), pr:fixCountry(cleanCell(g(7))),
-      pp:isPPEcell(g(8)), fp, np:cleanCell(g(10)), gr:cleanCell(g(11)),
+      pa:numClamp(g(r,'pa')), pv:numClamp(g(r,'pv')),
+      na:fixCountry(cleanCell(g(r,'na'))), pr:fixCountry(cleanCell(g(r,'pr'))),
+      pp:isPPEcell(g(r,'pp')), fp, np:cleanCell(g(r,'np')), gr:cleanCell(g(r,'gr')),
     });
   }
   return out;
 }
 
-/* Validation de structure : vérifie que les 13 colonnes attendues sont au bon endroit.
-   Évite d'afficher des données mal mappées si le Sheet est réorganisé/renommé. */
+/* Validation de structure : vérifie qu'on trouve les colonnes minimales requises */
 function checkStructure(rows){
   if(!rows||!rows.length) return {ok:false,reason:'Aucune ligne reçue de la source.'};
-  const head=(rows[0]||[]).map(x=>noAccent(String(x==null?'':x)));
-  const joined=head.join(' ');
-  if(!/denomination|beneficiaire|region/.test(joined))
-    return {ok:false,reason:'En-tête non reconnu : la première ligne ne ressemble pas à l\'en-tête RBE attendu.'};
-  const expect=[[0,'region'],[1,'denomination'],[2,'beneficiaire'],[3,'date'],[4,'action'],[5,'voix'],[6,'national'],[7,'pays'],[8,'ppe']];
-  const bad=expect.filter(([i,kw])=>!String(head[i]||'').includes(kw));
-  if(bad.length>2)
-    return {ok:false,reason:'Colonnes déplacées ou renommées : l\'ordre des colonnes attendu n\'est pas respecté.'};
+  const found=findHeader(rows);
+  if(!found)
+    return {ok:false,reason:'En-tête introuvable dans les 12 premières lignes. Colonnes minimales requises : Dénomination sociale et Bénéficiaire.'};
+  const missing=COL_MAP.filter(c=>['ds','pn','da','pa','na'].includes(c.key)&&found.colIdx[c.key]===undefined).map(c=>c.syn[0]);
+  if(missing.length>2)
+    return {ok:false,reason:`Colonnes importantes non trouvées : ${missing.join(', ')}.`};
   return {ok:true};
 }
 async function loadLiveData(opts={}){
@@ -1328,8 +1372,14 @@ async function loadLiveData(opts={}){
       if(bytes.length>1 && bytes[0]===0x50 && bytes[1]===0x4B){
         if(typeof XLSX==='undefined'){ lastErr='Lecteur xlsx non chargé.'; continue; }
         const wb=XLSX.read(buf,{type:'array'});
-        const ws=wb.Sheets[wb.SheetNames[0]];
-        rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''});
+        // Essayer toutes les feuilles jusqu'à trouver celle avec les bonnes colonnes
+        rows=null;
+        for(const name of wb.SheetNames){
+          const ws=wb.Sheets[name];
+          const candidate=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''});
+          if(findHeader(candidate)){rows=candidate;break;}
+        }
+        if(!rows){ lastErr='Aucune feuille Excel ne contient les colonnes RBE attendues.'; continue; }
       } else {
         const text=new TextDecoder('utf-8').decode(bytes);
         if(/^\s*(<html|<!doctype)|accounts\.google\.com/i.test(text.slice(0,400))){
@@ -1422,8 +1472,6 @@ const NR='<span class="nr">—</span>';
 const v=x=>(!x&&x!==0)?NR:esc(x);
 const vp=x=>(!x&&x!==0)?NR:esc(x)+'%';
 const fmt=n=>Number(n).toLocaleString('fr-FR');
-// Normalisation : retire accents + minuscules (recherche tolérante)
-const noAccent=s=>(s==null?'':String(s)).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 // Échappement HTML : neutralise tout balisage injecté via les données de la source
 const esc=s=>(s==null?'':String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Lien de recherche Google : nom cliquable -> ouvre Google dans un nouvel onglet
