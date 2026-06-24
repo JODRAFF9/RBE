@@ -1405,7 +1405,7 @@ async function loadLiveData(opts={}){
       refreshIndexes();
       reRenderEverything();
       setSyncStatus('live');
-      if(opts.notify)showToast(`Données actualisées en direct — ${fmt(recs.length)} enregistrements.`,'ok','fa-cloud-arrow-down');
+      if(opts.notify)showToast(`Données actualisées en direct - ${fmt(recs.length)} enregistrements.`,'ok','fa-cloud-arrow-down');
       return true;
     }catch(e){ lastErr=(e&&e.message)||String(e); }
   }
