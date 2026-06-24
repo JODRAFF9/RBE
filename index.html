@@ -1295,7 +1295,7 @@ const noAccent=s=>(s==null?'':String(s)).normalize('NFD').replace(/[̀-ͯ]/g,'')
 const COL_MAP=[
   {key:'rs',  syn:['region','localite','localisation','departement','district','wilaya','prefecture']},
   {key:'ds',  syn:['denomination','denominationsociale','raisonsociale','societe','entreprise','nomentite','entite','nomentreprise','nomdelentite']},
-  {key:'pn',  syn:['beneficiaire','beneficiaireeffectif','nomprenoms','nomprenom','nomcomplet','nom','personne','identite','proprietaire']},
+  {key:'pn',  syn:['beneficiaire','beneficiaireeffectif','nomprenoms','nomprenom','nomcomplet','nometprenoms','nometprenom','prenometnom','nomdubeneficiaire','nombeneficiaire','identitebeneficiaire','identitedubeneficiaire','nombenef','nomprénoms','nomdubeneficiaireeffectif','nometprenomsdubeneficiaire','nometprenomsdubenef','prenoms','prenomnom','nom','personne','identite','proprietaire','actionnaire','titulaire']},
   {key:'da',  syn:['dateacquisition','datedeclaration','datedepot','date','dateenregistrement','dateinscription']},
   {key:'pa',  syn:['pourcentageaction','partaction','paction','partcapital','pourcentagecapital','pcapital','action','participation','pourcentage','pourcent','part']},
   {key:'pv',  syn:['pourcentagevoix','partvoix','pvoix','droitdevote','voix','vote','droitvote']},
@@ -1321,7 +1321,7 @@ function findHeader(rows){
     const normed=row.map(normHead);
     const colIdx={};
     for(const {key,syn} of COL_MAP){
-      const pos=normed.findIndex(h=>syn.includes(h)||syn.some(s=>h.includes(s)&&h.length<s.length+6));
+      const pos=normed.findIndex(h=>syn.includes(h)||syn.some(s=>h.includes(s)&&h.length<s.length+30));
       if(pos!==-1) colIdx[key]=pos;
     }
     if(REQUIRED.every(k=>colIdx[k]!==undefined))
