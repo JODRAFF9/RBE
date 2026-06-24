@@ -1341,12 +1341,15 @@ function normalizeRows(rows){
     return idx!==undefined && r[idx]!==undefined ? r[idx] : '';
   };
   const out=[];let id=0;
+  let lastDs='', lastRs='', lastGr='';
   for(let i=headerIdx+1;i<rows.length;i++){
     const r=rows[i];
     if(!r||r.every(c=>String(c==null?'':c).trim()===''))continue;  // ligne vide
-    const ds=cleanCell(g(r,'ds'));
+    const ds=cleanCell(g(r,'ds'))||lastDs;   // cellule fusionnée → hérite de la ligne précédente
     if(!ds)continue;
-    let region=cleanCell(g(r,'rs')); if(region)region=titleCase(region);
+    lastDs=ds;
+    let region=cleanCell(g(r,'rs')); if(region)region=titleCase(region); if(!region)region=lastRs; else lastRs=region;
+    const gr=cleanCell(g(r,'gr'))||lastGr; if(gr)lastGr=gr;
     const {da,an}=parseDate(g(r,'da'));
     let fp=cleanCell(g(r,'fp')); if(fp==='0'||fp==='1')fp=null;
     id++;
@@ -1355,7 +1358,7 @@ function normalizeRows(rows){
       da, an,
       pa:numClamp(g(r,'pa')), pv:numClamp(g(r,'pv')),
       na:fixCountry(cleanCell(g(r,'na'))), pr:fixCountry(cleanCell(g(r,'pr'))),
-      pp:isPPEcell(g(r,'pp')), fp, np:cleanCell(g(r,'np')), gr:cleanCell(g(r,'gr')),
+      pp:isPPEcell(g(r,'pp')), fp, np:cleanCell(g(r,'np')), gr,
     });
   }
   return out;
