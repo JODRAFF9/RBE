@@ -1612,6 +1612,10 @@ document.querySelectorAll('.nav-bar a').forEach(a=>{
     const FILTER_PAGES=['dashboard','map','database','ppe','network'];
     document.body.classList.toggle('no-filters', !FILTER_PAGES.includes(pg) && pg!=='home');
     if(pg==='home')renderHomeNums();
+    // Réinitialiser les filtres silencieusement à chaque changement d'onglet
+    ['fr','fn','fp'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('fppe').checked=false;
+    applyF();
     setTimeout(updateNavTheme, 30);
     if(pg==='map'&&!leafMap)initMap();
     if(pg==='network')buildNet();
