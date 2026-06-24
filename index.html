@@ -402,6 +402,9 @@ th.srt.srt-desc::after{content:'▼';opacity:.95;font-size:.7em}
 /* ── FOOTER ── */
 footer{background:var(--bk);color:rgba(255,255,255,.5);text-align:center;padding:14px;font-size:.74rem;margin-top:24px;position:relative}
 footer .fb{color:var(--y);font-weight:700}
+footer .footer-links{margin-top:8px;display:flex;justify-content:center;gap:18px;flex-wrap:wrap}
+footer .footer-links a{color:rgba(255,255,255,.55);text-decoration:none;transition:.2s;font-size:.73rem}
+footer .footer-links a:hover{color:#fff}
 .btn-admin-foot{position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2);padding:5px 13px;border-radius:4px;font-family:var(--font);font-size:.74rem;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:6px}
 .btn-admin-foot:hover{background:rgba(255,255,255,.2);color:#fff}
 
@@ -1104,6 +1107,9 @@ body:not(.home) #page-home{display:none!important}
 <footer>
   <span class="fb">OpenRBE</span> - Registre des Bénéficiaires Effectifs |
   © CN-ITIE - Comité National ITIE Sénégal · 2025 · <span class="fb">Données officielles</span><br>
+  <div class="footer-links">
+    <a href="https://www.justice.gouv.sn" target="_blank" rel="noopener"><i class="fas fa-scale-balanced"></i> Ministère de la Justice - Sénégal</a>
+  </div>
 </footer>
 
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut" aria-label="Retour en haut"><i class="fas fa-arrow-up"></i></button>
