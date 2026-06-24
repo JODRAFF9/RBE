@@ -638,6 +638,10 @@ body:not(.home) #page-home{display:none!important}
 .guide-tbl td{padding:7px 11px;border-bottom:1px solid var(--brd)}
 .guide-tbl tr:nth-child(even) td{background:var(--bg)}
 .guide-body strong{color:var(--gd);font-weight:600}
+/* ── Sidebar draggable ── */
+.sb-drag-handle{cursor:grab;user-select:none}
+.sb-drag-handle:active{cursor:grabbing}
+#sb.is-dragging{opacity:.88;box-shadow:0 8px 32px rgba(0,0,0,.18);transition:none}
 </style>
 </head>
 <body>
@@ -866,7 +870,7 @@ body:not(.home) #page-home{display:none!important}
 <div id="app">
 <button class="sb-toggle" onclick="toggleFilters()" title="Afficher / masquer les filtres" aria-label="Filtres"><i class="fas fa-filter"></i></button>
 <div id="sb">
-  <div class="sb-ttl"><i class="fas fa-filter"></i> Filtres globaux</div>
+  <div class="sb-ttl sb-drag-handle" title="Déplacer le panneau"><i class="fas fa-grip-vertical" style="opacity:.45;margin-right:4px"></i><i class="fas fa-filter"></i> Filtres globaux</div>
 
   <!-- Réinitialiser EN HAUT -->
   <button class="btn-rst" onclick="resetF()"><i class="fas fa-rotate-left"></i> Réinitialiser tous les filtres</button>
@@ -2807,6 +2811,71 @@ if(document.readyState==='loading'){
 } else {
   initApp();
 }
+
+/* ── Sidebar draggable ─────────────────────────────────────────────────────*/
+(function(){
+  const sb=document.getElementById('sb');
+  const handle=sb&&sb.querySelector('.sb-drag-handle');
+  if(!sb||!handle)return;
+
+  let dragging=false, ox=0, oy=0;
+
+  handle.addEventListener('mousedown',e=>{
+    if(e.button!==0)return;
+    dragging=true;
+    sb.classList.add('is-dragging');
+    // Passer en position absolue la première fois qu'on commence à glisser
+    if(sb.style.position!=='fixed'||sb.style.left===''||sb.style.top===''){
+      const r=sb.getBoundingClientRect();
+      sb.style.left=r.left+'px';
+      sb.style.top=r.top+'px';
+    }
+    sb.style.position='fixed';
+    ox=e.clientX-sb.getBoundingClientRect().left;
+    oy=e.clientY-sb.getBoundingClientRect().top;
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove',e=>{
+    if(!dragging)return;
+    let nx=e.clientX-ox, ny=e.clientY-oy;
+    // Garder dans les limites de la fenêtre
+    nx=Math.max(0,Math.min(nx,window.innerWidth-sb.offsetWidth));
+    ny=Math.max(0,Math.min(ny,window.innerHeight-60));
+    sb.style.left=nx+'px';
+    sb.style.top=ny+'px';
+  });
+
+  document.addEventListener('mouseup',()=>{
+    if(!dragging)return;
+    dragging=false;
+    sb.classList.remove('is-dragging');
+  });
+
+  // Support tactile (mobile)
+  handle.addEventListener('touchstart',e=>{
+    const t=e.touches[0];
+    dragging=true;
+    sb.classList.add('is-dragging');
+    const r=sb.getBoundingClientRect();
+    sb.style.position='fixed';
+    ox=t.clientX-r.left; oy=t.clientY-r.top;
+  },{passive:true});
+
+  document.addEventListener('touchmove',e=>{
+    if(!dragging)return;
+    const t=e.touches[0];
+    let nx=t.clientX-ox, ny=t.clientY-oy;
+    nx=Math.max(0,Math.min(nx,window.innerWidth-sb.offsetWidth));
+    ny=Math.max(0,Math.min(ny,window.innerHeight-60));
+    sb.style.left=nx+'px'; sb.style.top=ny+'px';
+    e.preventDefault();
+  },{passive:false});
+
+  document.addEventListener('touchend',()=>{
+    dragging=false; sb.classList.remove('is-dragging');
+  });
+})();
 </script>
 </body>
 </html>
