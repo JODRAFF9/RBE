@@ -320,6 +320,7 @@ tbody td{padding:6px 10px;vertical-align:middle}
 /* ── Bandeau de fraîcheur des données ── */
 #fresh-banner{display:none;align-items:center;gap:10px;padding:9px 14px;border-radius:8px;margin-bottom:14px;font-size:.85rem;font-weight:500;border:1px solid transparent;line-height:1.35}
 #fresh-banner.show{display:flex}
+body.page-guide-active #fresh-banner{display:none!important}
 #fresh-banner.fb-live{background:#E8F4FB;border-color:#9DCFEA;color:#1C6FA5}
 #fresh-banner.fb-snap{background:#F1F3F4;border-color:#DADCE0;color:#5F6368}
 #fresh-banner.fb-warn{background:#E8F4FB;border-color:#6FB8DD;color:#1C6FA5}
@@ -1568,6 +1569,7 @@ document.querySelectorAll('.nav-bar a').forEach(a=>{
     const pg=a.dataset.page;
     document.getElementById('page-'+pg).classList.add('active');
     document.body.classList.toggle('home', pg==='home');
+    document.body.classList.toggle('page-guide-active', pg==='guide');
     const FILTER_PAGES=['dashboard','map','database','ppe','network'];
     document.body.classList.toggle('no-filters', !FILTER_PAGES.includes(pg) && pg!=='home');
     if(pg==='home')renderHomeNums();
