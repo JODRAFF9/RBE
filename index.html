@@ -2736,12 +2736,11 @@ function drawNet(){
     .call(d3.drag().on('start',(e,d)=>{if(!e.active)sim.alphaTarget(.3).restart();d.fx=d.x;d.fy=d.y;}).on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;}).on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}))
     .on('click',(e,d)=>{e.stopPropagation();zoomNode(d);});
   node.append('circle').attr('r',d=>d.group==='co'?15:9).attr('fill',d=>d.group==='co'?CL.g:CL.y).attr('stroke',d=>d.group==='co'?CL.gd:CL.yd).attr('stroke-width',1.5);
-  // Libellés : entreprises toujours ; bénéficiaires seulement si le graphe est petit (lisibilité)
-  const showBeLabel = nNodes.length<150;
-  node.filter(d=>d.group==='co'||showBeLabel).append('text').text(d=>d.label)
+  // Libellés : toujours afficher entreprises et bénéficiaires
+  node.append('text').text(d=>d.label)
     .attr('x',0).attr('y',d=>d.group==='co'?-19:-13).attr('text-anchor','middle')
     .attr('font-size',d=>d.group==='co'?'10px':'9px').attr('fill','#1A1A1A')
-    .attr('font-family','DM Sans,sans-serif').attr('font-weight',d=>d.group==='co'?'600':'400')
+    .attr('font-family','Outfit,sans-serif').attr('font-weight',d=>d.group==='co'?'600':'400')
     .attr('pointer-events','none');
   const upd=()=>{link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);node.attr('transform',d=>`translate(${d.x},${d.y})`);};
   upd();
