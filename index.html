@@ -293,6 +293,10 @@ tbody td{padding:6px 10px;vertical-align:middle}
 #nwrap{border:1px solid var(--brd);border-radius:var(--radius);background:#FAFCFB;height:500px;overflow:hidden}
 #nsvg{width:100%;height:100%}
 .nib{background:#fff;border:1px solid var(--brd);border-radius:var(--radius);padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh-s);animation:fu .25s ease}
+#net-tooltip{position:fixed;pointer-events:none;background:#fff;border:1px solid var(--brd);border-radius:10px;padding:10px 14px;box-shadow:0 4px 20px rgba(0,0,0,.15);font-size:.8rem;max-width:240px;z-index:9000;display:none;line-height:1.5}
+#net-tooltip strong{display:block;font-size:.85rem;margin-bottom:4px;color:var(--bk)}
+#net-tooltip .nt-row{display:flex;justify-content:space-between;gap:12px;color:var(--gray)}
+#net-tooltip .nt-row span:last-child{font-weight:600;color:var(--bk)}
 .niico{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;flex-shrink:0}
 .ntip{font-size:.74rem;color:var(--gray);margin-top:7px}
 .ntip i{color:var(--g)}
@@ -1085,6 +1089,7 @@ body:not(.home) #page-home{display:none!important}
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut" aria-label="Retour en haut"><i class="fas fa-arrow-up"></i></button>
 <button id="mob-filter-btn" onclick="toggleSbFold(event)"><i class="fas fa-filter"></i> Filtres</button>
 <div id="mob-overlay" onclick="closeMobFilter()"></div>
+<div id="net-tooltip"></div>
 
 <!-- ══ MODAL FICHE DÉTAILLÉE ══ -->
 <div class="modal-overlay hidden" id="modal-detail" onclick="closeOnBg(event,'modal-detail')">
@@ -2732,9 +2737,44 @@ function drawNet(){
   const iters=Math.min(320,Math.round(70+nNodes.length*0.3));
   for(let i=0;i<iters;i++) sim.tick();
   const link=nG.append('g').selectAll('line').data(nLinks).join('line').attr('stroke','#ddd').attr('stroke-width',1);
+  const tt=document.getElementById('net-tooltip');
   const node=nG.append('g').selectAll('g').data(nNodes).join('g').attr('cursor','pointer')
     .call(d3.drag().on('start',(e,d)=>{if(!e.active)sim.alphaTarget(.3).restart();d.fx=d.x;d.fy=d.y;}).on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;}).on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}))
-    .on('click',(e,d)=>{e.stopPropagation();zoomNode(d);});
+    .on('click',(e,d)=>{e.stopPropagation();zoomNode(d);})
+    .on('mouseover',(e,d)=>{
+      const lk=nLinks.filter(l=>(l.source.id||l.source)===d.id||(l.target.id||l.target)===d.id);
+      const isCo=d.group==='co';
+      let rows='';
+      if(isCo){
+        const bes=[...new Set(lk.map(l=>l.target.full||l.target))];
+        const recs=FD.filter(r=>r.ds===d.full);
+        rows+=`<div class="nt-row"><span>Bénéficiaires</span><span>${bes.length}</span></div>`;
+        const ppes=recs.filter(r=>r.ppe&&r.ppe.toLowerCase()==='oui').length;
+        if(ppes>0)rows+=`<div class="nt-row"><span>dont PPE</span><span>${ppes}</span></div>`;
+        const nats=[...new Set(recs.map(r=>r.na).filter(Boolean))];
+        if(nats.length)rows+=`<div class="nt-row"><span>Nationalité(s)</span><span>${nats.slice(0,2).join(', ')}${nats.length>2?'…':''}</span></div>`;
+      } else {
+        const cos=[...new Set(lk.map(l=>l.source.full||l.source))];
+        rows+=`<div class="nt-row"><span>Entreprises</span><span>${cos.length}</span></div>`;
+        const recs=FD.filter(r=>r.pn===d.full);
+        const pct=recs.map(r=>r.pa).filter(x=>x!=null&&x!=='');
+        if(pct.length)rows+=`<div class="nt-row"><span>% Actions (moy.)</span><span>${(pct.reduce((a,b)=>a+Number(b),0)/pct.length).toFixed(1).replace('.',',')} %</span></div>`;
+        const nat=recs[0]&&recs[0].na;
+        if(nat)rows+=`<div class="nt-row"><span>Nationalité</span><span>${nat}</span></div>`;
+        const ppe=recs[0]&&recs[0].ppe;
+        if(ppe&&ppe.toLowerCase()==='oui')rows+=`<div class="nt-row" style="color:var(--r)"><span>Statut</span><span>PPE</span></div>`;
+      }
+      tt.innerHTML=`<strong>${d.full}</strong>${rows}`;
+      tt.style.display='block';
+    })
+    .on('mousemove',e=>{
+      const x=e.clientX,y=e.clientY;
+      tt.style.left=(x+14)+'px';
+      tt.style.top=(y-10)+'px';
+      // Éviter que le tooltip sorte de l'écran à droite
+      if(x+14+240>window.innerWidth)tt.style.left=(x-tt.offsetWidth-14)+'px';
+    })
+    .on('mouseout',()=>{tt.style.display='none';});
   node.append('circle').attr('r',d=>d.group==='co'?15:9).attr('fill',d=>d.group==='co'?CL.g:CL.y).attr('stroke',d=>d.group==='co'?CL.gd:CL.yd).attr('stroke-width',1.5);
   // Libellés : toujours afficher entreprises et bénéficiaires
   node.append('text').text(d=>d.label)
